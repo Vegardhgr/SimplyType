@@ -1,6 +1,7 @@
 import './box.css'
 import wordlist_txt from '../wordlist.txt'
 import React, { useState, Dispatch, SetStateAction, ChangeEvent } from 'react'
+import RandSortArr from './randSortArr';
 
 type Dispatcher<S> = Dispatch<SetStateAction<S>>;
 type PressEvent = React.KeyboardEvent<HTMLInputElement>;
@@ -14,7 +15,8 @@ function Box({wordlist, setWordlist}:{wordlist: string, setWordlist: Dispatcher<
         try {
             const response = await fetch(wordlist_file)
             const text = await response.text()
-            const wordsArray = text.split(/\r?\n/) //Splitting the text into an array of words
+            let wordsArray: String[] = text.split(/\r?\n/) //Splitting the text into an array of words
+            wordsArray = RandSortArr(wordsArray) //Randomly sorting the array
             const wordsString = wordsArray.join('-') //Converts array into string with whitespace between each word
             setWordlist(wordsString)
         } catch(error) {
@@ -36,15 +38,16 @@ function Box({wordlist, setWordlist}:{wordlist: string, setWordlist: Dispatcher<
     }
 
     const handleChange = (e: React.KeyboardEvent<HTMLDivElement>) => {
-        const key = e.key
-        console.log("hei: ", key.charCodeAt(0))
-        if (key === "Backspace") {
-            setTypedString(typedString.slice(0,-1))
-        } else if (key.length > 1 && key !== "Space") {
-            
-        }
-        else if (key.charCodeAt(0) === 32 || key.charCodeAt(0) >= 65 && key.charCodeAt(0) <= 125) {
-            setTypedString(typedString+key)
+        const keyCode = e.key.charCodeAt(0)
+        const keyValue = e.key.valueOf()
+        console.log(e.key.valueOf())      
+        if (keyValue.length === 1 || keyValue === "Backspace") {
+            if (keyValue === "Backspace") {
+                setTypedString(typedString.slice(0,-1))
+            } 
+            else if (keyCode === 32 || keyCode >= 65 && keyCode <= 125) { //keyCode === 32 is space
+                setTypedString(typedString+keyValue)
+            }
         }
     }
 
