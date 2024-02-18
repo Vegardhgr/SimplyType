@@ -9,6 +9,11 @@ type wordTupleType = [string, boolean | undefined]
 function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Dispatcher<wordTupleType[]>}){
     const [removedChars, setRemovedChars] = useState<wordTupleType[]>([])
     const [charCount, setCharCount] = useState<number>(0)
+    const [timer, setTimer] = useState<number>(60)
+    const [timerId, setTimerId] = useState<number | null>(null); // State to hold the timer id 
+    const [timeLastUpdate, setTimeLastUpdate] = useState<number>(60)
+
+    const keystrokesBeforeDeletion: number = 20
 
     const incCharCount = () => {
         setCharCount(prevVal => prevVal+1)
@@ -18,8 +23,31 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
     }
 
     useEffect(() => {
-        {wordlist.length === 0 && fetchWordlist_txt(wordlist_txt)}    
-    },[])
+        if (timerId !== null) {
+        // Start the timer when the component mounts
+        
+        const timerId = setInterval(() => {
+            const timeNow = Date.now()
+            const elapsedTime = timeNow - timeLastUpdate
+            setTimeLastUpdate(timeNow)
+            setTimer(prevTime => (prevTime - Math.floor(elapsedTime/1000))); //Converts elapsedTime from ms to s
+        }, 100);
+
+        // Stop the timer when the time reaches zero
+        if (timer <= 0) {
+            clearInterval(timerId);
+        }
+
+        // Cleanup function to clear the timer when the component unmounts
+        return () => clearInterval(timerId);
+    }
+    }, [timer, timerId]);
+
+    useEffect(() => {
+        if (wordlist.length === 0) {
+            fetchWordlist_txt(wordlist_txt)
+        } 
+    }); 
     
     /*Fetching words from a text file*/
     async function fetchWordlist_txt(wordlist_file:string) {
@@ -51,6 +79,10 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
     }
 
     const handleChange = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        if (timerId===null) {
+            setTimerId(1)
+            setTimeLastUpdate(Date.now())
+        }
         const keyCode = e.key.charCodeAt(0)
         const keyValue = e.key.valueOf()
         console.log(e.key.valueOf())   
@@ -81,7 +113,7 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
 
                 incCharCount()
 
-                if (charCount > 4) {
+                if (charCount > keystrokesBeforeDeletion) {
                     setRemovedChars(prevVal => [...prevVal, wordlist[0]])
                     setWordlist(prevVal => prevVal.slice(1))
                 }
@@ -89,10 +121,19 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
         }
 
     }
+
+
+    
+
+
+    
     return(
-        <div id = "textWrapperBox">
-            <div tabIndex={1} id = "text" onKeyDown={handleChange}>{renderText()}</div>
-        </div>
+        <>
+            <div id = "textWrapperBox">
+                <div tabIndex={1} id = "text" onKeyDown={handleChange}>{renderText()}</div>
+            </div>
+            <div>{timer}</div>
+        </>
     )
 
 }
