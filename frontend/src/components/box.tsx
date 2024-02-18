@@ -79,6 +79,9 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
     }
 
     const handleChange = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        if (timer <= 0) {
+            return
+        }
         if (timerId===null) {
             setTimerId(1)
             setTimeLastUpdate(Date.now())
