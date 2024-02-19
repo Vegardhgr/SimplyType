@@ -1,7 +1,7 @@
 import './box.css'
 import wordlist_txt from '../wordlist.txt'
 import React, { useState, Dispatch, SetStateAction, useEffect} from 'react'
-import RandSortArr from './randSortArr';
+import FetchWordsFromTxtFile from './fetchWordsFromTxtFile';
 
 type Dispatcher<S> = Dispatch<SetStateAction<S>>;
 type wordTupleType = [string, boolean | undefined]
@@ -46,27 +46,10 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
 
     useEffect(() => {
         if (wordlist.length === 0) {
-            fetchWordlist_txt(wordlist_txt)
+            FetchWordsFromTxtFile(wordlist_txt, setWordlist)
         } 
     }); 
     
-    /*Fetching words from a text file*/
-    async function fetchWordlist_txt(wordlist_file:string) {
-        try {
-            const response = await fetch(wordlist_file)
-            const text = await response.text()
-            let wordsArray: String[] = text.split(/\r?\n/) //Splitting the text into an array of words
-            wordsArray = RandSortArr(wordsArray) //Randomly sorting the array
-            const wordsString = wordsArray.join('-') //Converts array into string with whitespace between each word
-            const wordsTuple: wordTupleType[] = wordsString.split("").map((char) => {
-                return [char, undefined]
-            })
-            setWordlist(wordsTuple)
-        } catch(error) {
-            console.log(error)
-        }
-    }
-
     const renderText = () => {
         return wordlist.map(([char, bool], index) => {
             if (bool === undefined) {
@@ -84,7 +67,7 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
         setTimerId(null)
         setRemovedChars([])
         setCharCount(0)
-        fetchWordlist_txt(wordlist_txt)
+        FetchWordsFromTxtFile(wordlist_txt, setWordlist)
     }
 
     const handleChange = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -134,11 +117,6 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
 
     }
 
-
-    
-
-
-    
     return(
         <>
             <div id = "textWrapperBox">
