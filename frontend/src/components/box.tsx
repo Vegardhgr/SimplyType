@@ -9,7 +9,8 @@ type wordTupleType = [string, boolean | undefined]
 function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Dispatcher<wordTupleType[]>}){
     const [removedChars, setRemovedChars] = useState<wordTupleType[]>([])
     const [charCount, setCharCount] = useState<number>(0)
-    const [timer, setTimer] = useState<number>(60)
+    const initialTime = 60
+    const [timer, setTimer] = useState<number>(initialTime)
     const [timerId, setTimerId] = useState<number | null>(null); // State to hold the timer id 
     const [timeLastUpdate, setTimeLastUpdate] = useState<number>(60)
 
@@ -78,6 +79,14 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
         })
     }
 
+    const reset = () => {
+        setTimer(initialTime)
+        setTimerId(null)
+        setRemovedChars([])
+        setCharCount(0)
+        fetchWordlist_txt(wordlist_txt)
+    }
+
     const handleChange = (e: React.KeyboardEvent<HTMLDivElement>) => {
         if (timer <= 0) {
             return
@@ -136,6 +145,7 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
                 <div tabIndex={1} id = "text" onKeyDown={handleChange}>{renderText()}</div>
             </div>
             <div>{timer}</div>
+            <button onClick={reset}>Reset</button>
         </>
     )
 
