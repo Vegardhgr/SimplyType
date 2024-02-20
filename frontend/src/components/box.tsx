@@ -2,6 +2,7 @@ import './box.css'
 import wordlist_txt from '../wordlist.txt'
 import React, { useState, Dispatch, SetStateAction, useEffect} from 'react'
 import FetchWordsFromTxtFile from './fetchWordsFromTxtFile';
+import Timer from './timer';
 
 type Dispatcher<S> = Dispatch<SetStateAction<S>>;
 type wordTupleType = [string, boolean | undefined]
@@ -9,10 +10,11 @@ type wordTupleType = [string, boolean | undefined]
 function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Dispatcher<wordTupleType[]>}){
     const [removedChars, setRemovedChars] = useState<wordTupleType[]>([])
     const [charCount, setCharCount] = useState<number>(0)
-    const initialTime = 60
+    const initialTime = 5
     const [timer, setTimer] = useState<number>(initialTime)
     const [timerId, setTimerId] = useState<number | null>(null); // State to hold the timer id 
-    const [timeLastUpdate, setTimeLastUpdate] = useState<number>(60)
+    const [timeLastUpdate, setTimeLastUpdate] = useState<number>(0)
+    const [isTimerSet, setIsTimerSet] = useState<boolean>(false);
 
     const keystrokesBeforeDeletion: number = 20
 
@@ -24,31 +26,36 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
     }
 
     useEffect(() => {
+        /*if (timerId !== null && !isTimerSet) {
+            setIsTimerSet(true);
+            Timer({timeLastUpdate, setTimeLastUpdate, timer, setTimer})
+
+        }*/
         if (timerId !== null) {
-        // Start the timer when the component mounts
+            // Start the timer when the component mounts
         
-        const timerId = setInterval(() => {
-            const timeNow = Date.now()
-            const elapsedTime = timeNow - timeLastUpdate
-            setTimeLastUpdate(timeNow)
-            setTimer(prevTime => (prevTime - Math.floor(elapsedTime/1000))); //Converts elapsedTime from ms to s
-        }, 100);
+            const timerId = setInterval(() => {
+                const timeNow = Date.now()
+                const elapsedTime = timeNow - timeLastUpdate
+                setTimeLastUpdate(timeNow)
+                setTimer(prevTime => (prevTime - Math.floor(elapsedTime/1000))); //Converts elapsedTime from ms to s
+            }, 100);
 
-        // Stop the timer when the time reaches zero
-        if (timer <= 0) {
-            clearInterval(timerId);
+            // Stop the timer when the time reaches zero
+            if (timer <= 0) {
+                clearInterval(timerId);
+            }
+
+            // Cleanup function to clear the timer when the component unmounts
+            return () => clearInterval(timerId);
         }
-
-        // Cleanup function to clear the timer when the component unmounts
-        return () => clearInterval(timerId);
-    }
     }, [timer, timerId]);
 
     useEffect(() => {
         if (wordlist.length === 0) {
             FetchWordsFromTxtFile(wordlist_txt, setWordlist)
         } 
-    }); 
+    });
     
     const renderText = () => {
         return wordlist.map(([char, bool], index) => {
@@ -114,7 +121,20 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
                 }
             }
         }
+    }
 
+    const renderStatus = () => {
+        let correctWords:number = 0
+        let wrongWords:number = 0
+        wordlist.map(([_, bool]) => {
+            if (bool) {
+                correctWords += 1
+            } else if (bool === false) {
+                wrongWords += 1
+            }
+        })
+        return <div>Correct: <span style={{color:"green"}}>{correctWords}</span>
+            Wrong: <span style={{color:"red"}}>{wrongWords}</span></div>
     }
 
     return(
@@ -123,6 +143,7 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
                 <div tabIndex={1} id = "text" onKeyDown={handleChange}>{renderText()}</div>
             </div>
             <div>{timer}</div>
+            {timer == 0 && renderStatus()}
             <button onClick={reset}>Reset</button>
         </>
     )
