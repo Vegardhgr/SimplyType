@@ -5,6 +5,7 @@ Features:
 - [x] Stop timer when timer reaches zero.
 - [x] Add reset button. Set timer to initial value, and retrieve new words from text file.
 - [x] Display the number of correct and wrong characters.
-- [ ] Display the number of correct words. One word is equivalent to five keystrokes.
+- [x] Display the number of correct words. One word is equivalent to five keystrokes.
+- [x] Display accuracy. 
 - [ ] Save highscore localy in browser.
 - [ ] Add CSS.
