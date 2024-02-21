@@ -10,8 +10,8 @@ type wordTupleType = [string, boolean | undefined]
 function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Dispatcher<wordTupleType[]>}){
     const [removedChars, setRemovedChars] = useState<wordTupleType[]>([])
     const [charCount, setCharCount] = useState<number>(0)
-    const initialTime = 5
-    const [timer, setTimer] = useState<number>(initialTime)
+    const initialTimeInSec = 10
+    const [timer, setTimer] = useState<number>(initialTimeInSec)
     const [timerId, setTimerId] = useState<number | null>(null); // State to hold the timer id 
     const [timeLastUpdate, setTimeLastUpdate] = useState<number>(0)
     const [isTimerSet, setIsTimerSet] = useState<boolean>(false);
@@ -70,7 +70,7 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
     }
 
     const reset = () => {
-        setTimer(initialTime)
+        setTimer(initialTimeInSec)
         setTimerId(null)
         setRemovedChars([])
         setCharCount(0)
@@ -124,17 +124,29 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
     }
 
     const renderStatus = () => {
-        let correctWords:number = 0
-        let wrongWords:number = 0
-        wordlist.map(([_, bool]) => {
+        let nrOfCorrectChars:number = 0
+        let nrOfWrongChars:number = 0
+        const charInAvgWord:number = 5
+        console.log(wordlist)
+        removedChars.map(([_,bool]) => {
             if (bool) {
-                correctWords += 1
-            } else if (bool === false) {
-                wrongWords += 1
+                nrOfCorrectChars += 1
+            } else {
+                nrOfWrongChars += 1 
             }
         })
-        return <div>Correct: <span style={{color:"green"}}>{correctWords}</span>
-            Wrong: <span style={{color:"red"}}>{wrongWords}</span></div>
+        for (const [_, bool] of wordlist) {
+            if (bool) {
+                nrOfCorrectChars += 1
+            } else if (bool === false) {
+                nrOfWrongChars += 1
+            } else {
+                break
+            }
+        } 
+        return <div>Correct: <span style={{color:"green"}}>{nrOfCorrectChars}</span>
+            Wrong: <span style={{color:"red"}}>{nrOfWrongChars}</span>
+            WPM: {nrOfCorrectChars/(charInAvgWord*initialTimeInSec/60)}</div>
     }
 
     return(
