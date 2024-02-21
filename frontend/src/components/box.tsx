@@ -3,6 +3,7 @@ import wordlist_txt from '../wordlist.txt'
 import React, { useState, Dispatch, SetStateAction, useEffect} from 'react'
 import FetchWordsFromTxtFile from './fetchWordsFromTxtFile';
 import Timer from './timer';
+import renderStatus from './renderStatus';
 
 type Dispatcher<S> = Dispatch<SetStateAction<S>>;
 type wordTupleType = [string, boolean | undefined]
@@ -77,7 +78,7 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
         FetchWordsFromTxtFile(wordlist_txt, setWordlist)
     }
 
-    const handleChange = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const handleKeyboardEvent = (e: React.KeyboardEvent<HTMLDivElement>) => {
         if (timer <= 0) {
             return
         }
@@ -123,40 +124,13 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
         }
     }
 
-    const renderStatus = () => {
-        let nrOfCorrectChars:number = 0
-        let nrOfWrongChars:number = 0
-        const charInAvgWord:number = 5
-        console.log(wordlist)
-        removedChars.map(([_,bool]) => {
-            if (bool) {
-                nrOfCorrectChars += 1
-            } else {
-                nrOfWrongChars += 1 
-            }
-        })
-        for (const [_, bool] of wordlist) {
-            if (bool) {
-                nrOfCorrectChars += 1
-            } else if (bool === false) {
-                nrOfWrongChars += 1
-            } else {
-                break
-            }
-        } 
-        return <div>Correct: <span style={{color:"green"}}>{nrOfCorrectChars}</span>
-            Wrong: <span style={{color:"red"}}>{nrOfWrongChars}</span>
-            WPM: {(nrOfCorrectChars/(charInAvgWord*initialTimeInSec/60)).toFixed(1)}
-            Accuracy: {(nrOfCorrectChars/(nrOfCorrectChars+nrOfWrongChars)).toFixed(2)}</div>
-    }
-
     return(
         <>
             <div id = "textWrapperBox">
-                <div tabIndex={1} id = "text" onKeyDown={handleChange}>{renderText()}</div>
+                <div tabIndex={1} id = "text" onKeyDown={handleKeyboardEvent}>{renderText()}</div>
             </div>
             <div>{timer}</div>
-            {timer == 0 && renderStatus()}
+            {timer == 0 && renderStatus(removedChars, wordlist, initialTimeInSec)}
             <button onClick={reset}>Reset</button>
         </>
     )
