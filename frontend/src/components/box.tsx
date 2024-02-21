@@ -1,9 +1,10 @@
 import './box.css'
 import wordlist_txt from '../wordlist.txt'
-import React, { useState, Dispatch, SetStateAction, useEffect} from 'react'
+import { useState, Dispatch, SetStateAction, useEffect} from 'react'
 import FetchWordsFromTxtFile from './fetchWordsFromTxtFile';
 import Timer from './timer';
 import renderStatus from './renderStatus';
+import HandleKeyboardEvent from '../utils/handleKeyboardEvent';
 
 type Dispatcher<S> = Dispatch<SetStateAction<S>>;
 type wordTupleType = [string, boolean | undefined]
@@ -78,7 +79,7 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
         FetchWordsFromTxtFile(wordlist_txt, setWordlist)
     }
 
-    const handleKeyboardEvent = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const keyPressed = (e: React.KeyboardEvent<HTMLDivElement>) => {
         if (timer <= 0) {
             return
         }
@@ -86,48 +87,16 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
             setTimerId(1)
             setTimeLastUpdate(Date.now())
         }
-        const keyCode = e.key.charCodeAt(0)
-        const keyValue = e.key.valueOf()
-        console.log(e.key.valueOf())   
-        if (keyValue.length === 1 || keyValue === "Backspace") {
-            if (keyValue === "Backspace" && charCount > 0) {
-                decCharCount()
-                setWordlist(oldValue => {
-                        let newValue = [...oldValue]
-                        newValue[charCount-removedChars.length-1] = [newValue[charCount-removedChars.length-1][0], undefined]                        
-                        removedChars.length > 0 ? newValue = [removedChars[removedChars.length-1], ...newValue]:null
-                        return newValue
-                })
-                if (removedChars.length > 0) {
-                    setRemovedChars(oldValue => oldValue.slice(0,-1))
-                }
-            } else if (keyValue !== "Backspace" && (keyCode === 32 || keyCode >= 65 && keyCode <= 125)) { //keyCode === 32 is space            
-                let isCorrectKey = false
-                console.log(charCount)
-                if (keyValue === wordlist[charCount-removedChars.length][0] || 
-                    keyCode === 32 && wordlist[charCount-removedChars.length][0] === "-") {
-                    isCorrectKey = true
-                }
-                setWordlist(oldValue => {
-                    let newValue = [...oldValue]
-                    newValue[charCount-removedChars.length] = [newValue[charCount-removedChars.length][0], isCorrectKey]                        
-                    return newValue
-                })
 
-                incCharCount()
-
-                if (charCount > keystrokesBeforeDeletion) {
-                    setRemovedChars(prevVal => [...prevVal, wordlist[0]])
-                    setWordlist(prevVal => prevVal.slice(1))
-                }
-            }
-        }
+        HandleKeyboardEvent(charCount, setCharCount, removedChars, setRemovedChars, wordlist, setWordlist, e)
     }
+        
+    
 
     return(
         <>
             <div id = "textWrapperBox">
-                <div tabIndex={1} id = "text" onKeyDown={handleKeyboardEvent}>{renderText()}</div>
+                <div tabIndex={1} id = "text" onKeyDown={keyPressed}>{renderText()}</div>
             </div>
             <div>{timer}</div>
             {timer == 0 && renderStatus(removedChars, wordlist, initialTimeInSec)}
