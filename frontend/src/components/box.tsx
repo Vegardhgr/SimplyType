@@ -10,7 +10,7 @@ type wordTupleType = [string, boolean | undefined]
 function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Dispatcher<wordTupleType[]>}){
     const [removedChars, setRemovedChars] = useState<wordTupleType[]>([])
     const [charCount, setCharCount] = useState<number>(0)
-    const initialTimeInSec = 10
+    const initialTimeInSec = 5
     const [timer, setTimer] = useState<number>(initialTimeInSec)
     const [timerId, setTimerId] = useState<number | null>(null); // State to hold the timer id 
     const [timeLastUpdate, setTimeLastUpdate] = useState<number>(0)
@@ -146,7 +146,8 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
         } 
         return <div>Correct: <span style={{color:"green"}}>{nrOfCorrectChars}</span>
             Wrong: <span style={{color:"red"}}>{nrOfWrongChars}</span>
-            WPM: {nrOfCorrectChars/(charInAvgWord*initialTimeInSec/60)}</div>
+            WPM: {(nrOfCorrectChars/(charInAvgWord*initialTimeInSec/60)).toFixed(1)}
+            Accuracy: {(nrOfCorrectChars/(nrOfCorrectChars+nrOfWrongChars)).toFixed(2)}</div>
     }
 
     return(
