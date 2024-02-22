@@ -5,6 +5,7 @@ import FetchWordsFromTxtFile from './fetchWordsFromTxtFile';
 import Timer from './timer';
 import renderStatus from './renderStatus';
 import HandleKeyboardEvent from '../utils/handleKeyboardEvent';
+import CalcWPM from '../utils/calcWPM';
 
 type Dispatcher<S> = Dispatch<SetStateAction<S>>;
 type wordTupleType = [string, boolean | undefined]
@@ -12,20 +13,19 @@ type wordTupleType = [string, boolean | undefined]
 function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Dispatcher<wordTupleType[]>}){
     const [removedChars, setRemovedChars] = useState<wordTupleType[]>([])
     const [charCount, setCharCount] = useState<number>(0)
-    const initialTimeInSec = 5
+    const initialTimeInSec = 60
     const [timer, setTimer] = useState<number>(initialTimeInSec)
     const [timerId, setTimerId] = useState<number | null>(null); // State to hold the timer id 
     const [timeLastUpdate, setTimeLastUpdate] = useState<number>(0)
-    const [isTimerSet, setIsTimerSet] = useState<boolean>(false);
+    const [isTimerSet, setIsTimerSet] = useState<boolean>(false)
+    const localStorageKey = "highScore"
+    const localStorageHighScore:string|null = localStorage.getItem(localStorageKey)
+    const [highScore, setHighScore] = useState<number>(localStorageHighScore===null?0:parseFloat(localStorageHighScore))
 
-    const keystrokesBeforeDeletion: number = 20
 
-    const incCharCount = () => {
-        setCharCount(prevVal => prevVal+1)
-    }
-    const decCharCount = () => {
-        setCharCount(prevVal => prevVal-1)
-    }
+    let nrOfCorrectChars:number = 0
+    let nrOfWrongChars:number = 0
+    
 
     useEffect(() => {
         /*if (timerId !== null && !isTimerSet) {
@@ -33,6 +33,7 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
             Timer({timeLastUpdate, setTimeLastUpdate, timer, setTimer})
 
         }*/
+        
         if (timerId !== null) {
             // Start the timer when the component mounts
         
@@ -51,12 +52,40 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
             // Cleanup function to clear the timer when the component unmounts
             return () => clearInterval(timerId);
         }
-    }, [timer, timerId]);
+    }, [timer, timerId])
 
     useEffect(() => {
         if (wordlist.length === 0) {
             FetchWordsFromTxtFile(wordlist_txt, setWordlist)
-        } 
+        }
+        
+        if (timer<=0) {
+            removedChars.map(([_,bool]) => {
+                if (bool) {
+                    nrOfCorrectChars += 1
+                } else {
+                    nrOfWrongChars += 1 
+                }
+            })
+            for (const [_,bool] of wordlist) {
+                if (bool) {
+                    nrOfCorrectChars += 1
+                } else if (bool === false) {
+                    nrOfWrongChars += 1
+                } else {
+                    break
+                }
+            }
+            const currentHighScoreStr:string|null = localStorage.getItem("highScore")
+            const currentHighScore:number = currentHighScoreStr===null?0:parseFloat(currentHighScoreStr)
+            if(currentHighScore !== null){
+                const potentialHighScore:number = CalcWPM(nrOfCorrectChars, initialTimeInSec)
+                if (potentialHighScore>currentHighScore) {
+                    localStorage.setItem("highScore", potentialHighScore.toString())
+                    setHighScore(potentialHighScore)
+                }
+            }
+        }
     });
     
     const renderText = () => {
@@ -95,10 +124,11 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
 
     return(
         <>
+            <div>High score: {highScore} WPM </div>
             <div id = "textWrapperBox">
                 <div tabIndex={1} id = "text" onKeyDown={keyPressed}>{renderText()}</div>
             </div>
-            <div>{timer}</div>
+            <div>Time:  {timer} sec</div>
             {timer == 0 && renderStatus(removedChars, wordlist, initialTimeInSec)}
             <button onClick={reset}>Reset</button>
         </>

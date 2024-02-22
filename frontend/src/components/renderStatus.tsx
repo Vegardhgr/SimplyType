@@ -1,9 +1,10 @@
+import CalcWPM from "../utils/calcWPM"
+
 type wordTupleType = [string, boolean | undefined]
 
 function renderStatus(removedChars:wordTupleType[], wordlist:wordTupleType[], initialTimeInSec:number) {
     let nrOfCorrectChars:number = 0
     let nrOfWrongChars:number = 0
-    const charInAvgWord:number = 5
     
     removedChars.map(([_,bool]) => {
         if (bool) {
@@ -23,7 +24,7 @@ function renderStatus(removedChars:wordTupleType[], wordlist:wordTupleType[], in
     } 
     return <div>Correct: <span style={{color:"green"}}>{nrOfCorrectChars}</span>
         Wrong: <span style={{color:"red"}}>{nrOfWrongChars}</span>
-        WPM: {(nrOfCorrectChars/(charInAvgWord*initialTimeInSec/60)).toFixed(1)}
+        WPM: {CalcWPM(nrOfCorrectChars, initialTimeInSec)}
         Accuracy: {(nrOfCorrectChars/(nrOfCorrectChars+nrOfWrongChars)).toFixed(2)}</div>
 }
 
