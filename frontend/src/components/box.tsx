@@ -13,7 +13,7 @@ type wordTupleType = [string, boolean | undefined]
 function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Dispatcher<wordTupleType[]>}){
     const [removedChars, setRemovedChars] = useState<wordTupleType[]>([])
     const [charCount, setCharCount] = useState<number>(0)
-    const initialTimeInSec:number = 60
+    const initialTimeInSec:number = 5
     const [timer, setTimer] = useState<number>(initialTimeInSec)
     const [timerId, setTimerId] = useState<number | null>(null); // State to hold the timer id 
     const [timeLastUpdate, setTimeLastUpdate] = useState<number>(0)
@@ -105,7 +105,7 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
         HandleKeyboardEvent(charCount, setCharCount, removedChars, setRemovedChars, wordlist, setWordlist, e)
     }
         
-   const countNumberOfCorrectAndWrongChars = () => {
+    const countNumberOfCorrectAndWrongChars = () => {
         removedChars.map(([_,bool]) => {
             if (bool) {
                 nrOfCorrectChars += 1
@@ -123,11 +123,17 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
             }
         }
         return true
-   } 
+    } 
+
+    const clearHighScore = () => {
+        localStorage.setItem(localStorageKey, "0")
+        setHighScore(0)
+    }
 
     return(
         <>
             <div>High score: {highScore} WPM </div>
+            <button onClick={clearHighScore}>Clear high score</button>
             <div id = "textWrapperBox">
                 <div tabIndex={1} id = "text" onKeyDown={keyPressed}>{renderText()}</div>
             </div>
