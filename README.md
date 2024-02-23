@@ -9,7 +9,7 @@ Features:
 - [x] Display accuracy. 
 - [x] Save high score locally in the browser.
 - [ ] Add button to decide whether new high score should be saved.
-- [ ] Add button to reset the high score.
+- [x] Add button to clear high score.
 - [ ] Backspace should only work for the current word.
 - [ ] Add CSS.
 - [ ] Set up docker. (Just for fun).
