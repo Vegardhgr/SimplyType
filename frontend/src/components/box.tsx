@@ -21,11 +21,10 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
     const localStorageKey = "highScore"
     const localStorageHighScore:string|null = localStorage.getItem(localStorageKey)
     const [highScore, setHighScore] = useState<number>(localStorageHighScore===null?0:parseFloat(localStorageHighScore))
-
-    let nrOfCorrectChars:number = 0
-    let nrOfWrongChars:number = 0
+    const [nrOfCorrectChars, setNrOfCorrectChars] = useState<number>(0)
+    const [nrOfWrongChars, setNrOfWrongChars] = useState<number>(0)
+    const [charsCounted, setCharsCounted] = useState(false)
     
-
     useEffect(() => {
         /*if (timerId !== null && !isTimerSet) {
             setIsTimerSet(true);
@@ -57,21 +56,6 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
         if (wordlist.length === 0) {
             FetchWordsFromTxtFile(wordlist_txt, setWordlist)
         }
-        
-        if (timer<=0) {
-            isHighScore()
-            /*const currentHighScoreStr:string|null = localStorage.getItem("highScore")
-            const currentHighScore:number = currentHighScoreStr===null?0:parseFloat(currentHighScoreStr)
-            if(currentHighScore !== null){
-                console.log("nrOfCorr: " + nrOfCorrectChars + " ;; " + "inital time: " + initialTimeInSec )
-                const potentialHighScore:number = CalcWPM(nrOfCorrectChars, initialTimeInSec)
-                if (potentialHighScore>currentHighScore) {
-                    console.log("pHS: " + potentialHighScore)
-                    localStorage.setItem("highScore", potentialHighScore.toString())
-                    setHighScore(potentialHighScore)
-                }
-            }*/
-        }
     });
     
     const renderText = () => {
@@ -91,6 +75,7 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
         setTimerId(null)
         setRemovedChars([])
         setCharCount(0)
+        setCharsCounted(false)
         FetchWordsFromTxtFile(wordlist_txt, setWordlist)
     }
 
@@ -107,22 +92,30 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
     }
         
     const countNumberOfCorrectAndWrongChars = () => {
+        if (charsCounted) {
+            return true
+        }
+        let correct = 0
+        let wrong = 0
         removedChars.map(([_,bool]) => {
             if (bool) {
-                nrOfCorrectChars += 1
+                correct += 1
             } else {
-                nrOfWrongChars += 1 
+                wrong += 1 
             }
         })
         for (const [_,bool] of wordlist) {
             if (bool) {
-                nrOfCorrectChars += 1
+                correct += 1
             } else if (bool === false) {
-                nrOfWrongChars += 1
+                wrong += 1
             } else {
+                setNrOfCorrectChars(correct)
+                setNrOfWrongChars(wrong)
                 break
             }
         }
+        setCharsCounted(true)
         return true
     } 
 
@@ -134,20 +127,32 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
     const isHighScore = () => {
         const potentialHighScore:number = CalcWPM(nrOfCorrectChars, initialTimeInSec)
         if (potentialHighScore>highScore) {
-            localStorage.setItem("highScore", potentialHighScore.toString())
-            setHighScore(potentialHighScore)
+            return true
         }
+        return false
+    }
+
+    const saveHighScore = () => {
+        const newHighScore = CalcWPM(nrOfCorrectChars, initialTimeInSec)
+        localStorage.setItem(localStorageKey, newHighScore.toString())
+        setHighScore(newHighScore)
+    }
+
+    const saveHighScoreButton = () => {
+        return isHighScore() ? <button onClick={saveHighScore}>Save high score</button>:""
     }
 
     return(
         <>
+            {timer <= 0 && countNumberOfCorrectAndWrongChars()}
             <div>High score: {highScore} WPM </div>
+            {timer <= 0  && saveHighScoreButton()}
             <button onClick={clearHighScore}>Clear high score</button>
             <div id = "textWrapperBox">
                 <div tabIndex={1} id = "text" onKeyDown={keyPressed}>{renderText()}</div>
             </div>
             <div>Time:  {timer} sec</div>
-            {timer == 0 && countNumberOfCorrectAndWrongChars() &&
+            {timer <= 0 &&
                     renderStatus(nrOfCorrectChars, nrOfWrongChars, initialTimeInSec)
             }
             <button onClick={reset}>Reset</button>
