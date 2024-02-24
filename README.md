@@ -11,5 +11,6 @@ Features:
 - [x] Add button to decide whether new high score should be saved.
 - [x] Add button to clear high score.
 - [ ] Backspace should only work for the current word.
+- [ ] Allowing users to designate specific characters for focused practice. 
 - [ ] Add CSS.
 - [ ] Set up docker. (Just for fun).
