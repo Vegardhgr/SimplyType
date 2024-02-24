@@ -59,7 +59,8 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
         }
         
         if (timer<=0) {
-            const currentHighScoreStr:string|null = localStorage.getItem("highScore")
+            isHighScore()
+            /*const currentHighScoreStr:string|null = localStorage.getItem("highScore")
             const currentHighScore:number = currentHighScoreStr===null?0:parseFloat(currentHighScoreStr)
             if(currentHighScore !== null){
                 console.log("nrOfCorr: " + nrOfCorrectChars + " ;; " + "inital time: " + initialTimeInSec )
@@ -69,7 +70,7 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
                     localStorage.setItem("highScore", potentialHighScore.toString())
                     setHighScore(potentialHighScore)
                 }
-            }
+            }*/
         }
     });
     
@@ -128,6 +129,14 @@ function Box({wordlist, setWordlist}:{wordlist: wordTupleType[], setWordlist: Di
     const clearHighScore = () => {
         localStorage.setItem(localStorageKey, "0")
         setHighScore(0)
+    }
+
+    const isHighScore = () => {
+        const potentialHighScore:number = CalcWPM(nrOfCorrectChars, initialTimeInSec)
+        if (potentialHighScore>highScore) {
+            localStorage.setItem("highScore", potentialHighScore.toString())
+            setHighScore(potentialHighScore)
+        }
     }
 
     return(
