@@ -14,3 +14,7 @@ Features:
 - [ ] Allowing users to designate specific characters for focused practice. 
 - [ ] Add CSS.
 - [ ] Set up docker. (Just for fun).
+
+Internal improvements:
+- [ ] Not have a removed list that contains removed chars. Rather add a boolean to the tuple that states whether the char should be displayed.
+- [ ] Rename box.tsx to text.tsx. Move all logic that is not responsible for rendering the text nor handeling input, out of this component.
