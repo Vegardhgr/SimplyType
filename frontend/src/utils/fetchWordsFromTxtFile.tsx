@@ -1,5 +1,5 @@
-import React, { Dispatch, SetStateAction } from 'react'
-import RandSortArr from './randSortArr';
+import { Dispatch, SetStateAction } from 'react'
+import RandSortArr from '../components/randSortArr';
 
 
 type Dispatcher<S> = Dispatch<SetStateAction<S>>;

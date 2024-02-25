@@ -1,15 +1,76 @@
 import './App.css'
-import Box from './components/box'
-import { useState } from 'react'
+import wordlist_txt from './wordlist.txt'
+import Text from './components/typing'
+import { useState, useEffect } from 'react'
+import CalcWPM from './utils/calcWPM'
+import FetchWordsFromTxtFile from './utils/fetchWordsFromTxtFile'
+import CorrectAndWrongNrOfChars from './utils/correctAndWrongNrOfChars'
 
 type wordTupleType = [string, boolean | undefined]
 
 function App() {
-  const [wordlist, setWordlist] = useState<wordTupleType[]>([]) 
+    const localStorageKey = "highScore"
+    const initialTimeInSec = 2
+    const localStorageHighScore:string|null = localStorage.getItem(localStorageKey)
+    const [wordlist, setWordlist] = useState<wordTupleType[]>([]) 
+    const [removedChars, setRemovedChars] = useState<wordTupleType[]>([])
+    const [highScore, setHighScore] = useState<number>(localStorageHighScore===null?0:parseFloat(localStorageHighScore))
+    const [nrOfCorrectChars, setNrOfCorrectChars] = useState<number>(0)
+    const [nrOfWrongChars, setNrOfWrongChars] = useState<number>(0)
+    const [timerIsZero, setTimerIsZero] = useState(false)
+    const [isCharsCounted, setIsCharsCounted] = useState(false)
 
-  return (
-      <Box setWordlist = {setWordlist} wordlist = {wordlist}/>
-  )
+    useEffect(() => {
+        if ((wordlist.length === 0) || wordlist[0][0] ==="Loading...") {
+            FetchWordsFromTxtFile(wordlist_txt, setWordlist)
+        }
+        if (timerIsZero && !isCharsCounted) {
+            console.log("it does actually go in here")
+            const [nrOfCorrect, nrOfWrong, isCounted] = CorrectAndWrongNrOfChars(removedChars, wordlist)
+            setNrOfCorrectChars(nrOfCorrect)
+            setNrOfWrongChars(nrOfWrong)
+            setIsCharsCounted(isCounted)
+        }
+    }, [wordlist, timerIsZero]);
+
+    const isHighScore = () => {
+        const potentialHighScore:number = CalcWPM(nrOfCorrectChars, initialTimeInSec)
+        if (potentialHighScore>highScore) {
+            return true
+        }
+        return false
+    }
+    const saveHighScore = () => {
+        const newHighScore = CalcWPM(nrOfCorrectChars, initialTimeInSec)
+        localStorage.setItem(localStorageKey, newHighScore.toString())
+        setHighScore(newHighScore)
+    }
+    const saveHighScoreButton = () => {
+        return isHighScore() ? <button onClick={saveHighScore}>Save high score</button>:""
+    }
+    const clearHighScore = () => {
+        localStorage.setItem(localStorageKey, "0")
+        setHighScore(0)
+    }
+
+
+
+    return (
+        <div id = "content">
+            <div id = "highScore">
+                <div>High score: {highScore}</div>
+                {timerIsZero  && saveHighScoreButton()}
+                <button onClick={clearHighScore}>Clear high score</button>
+            </div>
+            <div id = "textAndTimeRendering">
+                <Text setWordlist = {setWordlist} wordlist = {wordlist} 
+                    nrOfCorrectChars = {nrOfCorrectChars} nrOfWrongChars = {nrOfWrongChars}
+                    initialTimeInSec = {initialTimeInSec} setTimerIsZero = {setTimerIsZero}
+                    removedChars = {removedChars} setRemovedChars = {setRemovedChars}
+                    setIsCharsCounted = {setIsCharsCounted}/>
+            </div>
+        </div>
+    )
 }
 
 export default App
