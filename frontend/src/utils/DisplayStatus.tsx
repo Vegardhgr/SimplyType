@@ -1,6 +1,6 @@
-import CalcWPM from "../utils/calcWPM"
+import CalcWPM from "./calcWPM"
 
-function renderStatus(nrOfCorrectChars:number, nrOfWrongChars:number, initialTimeInSec:number) {
+function DisplayStatus(nrOfCorrectChars:number, nrOfWrongChars:number, initialTimeInSec:number) {
     const accuracy = (nrOfCorrectChars/(nrOfCorrectChars+nrOfWrongChars)*100).toFixed(1)
     return <div>Correct: <span style={{color:"green"}}>{nrOfCorrectChars}</span>
         Wrong: <span style={{color:"red"}}>{nrOfWrongChars}</span>
@@ -8,4 +8,4 @@ function renderStatus(nrOfCorrectChars:number, nrOfWrongChars:number, initialTim
         Accuracy: {accuracy == "NaN" ? 0 : accuracy}%</div>
 }
 
-export default renderStatus;
+export default DisplayStatus;

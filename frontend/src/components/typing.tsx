@@ -1,6 +1,6 @@
 import './typing.css'
 import { useState, Dispatch, SetStateAction, useEffect} from 'react'
-import renderStatus from './renderStatus';
+import renderStatus from '../utils/DisplayStatus';
 import HandleKeyboardEvent from '../utils/handleKeyboardEvent';
 
 type Dispatcher<S> = Dispatch<SetStateAction<S>>;
