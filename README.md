@@ -17,4 +17,4 @@ Features:
 
 Internal improvements:
 - [ ] Not have a removed list that contains removed chars. Rather add a boolean to the tuple that states whether the char should be displayed.
-- [ ] Rename box.tsx to text.tsx. Move all logic that is not responsible for rendering the text nor handeling input, out of this component.
+- [ ] Rename box.tsx to typing.tsx. Move all logic that is not responsible for rendering the text nor handeling input, out of this component.
