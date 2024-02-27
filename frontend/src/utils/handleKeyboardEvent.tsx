@@ -21,7 +21,8 @@ function HandleKeyboardEvent(charCount:number, setCharCount:Dispatcher<number>,
         }
         
         if (keyValue.length === 1 || keyValue === "Backspace") {
-            if (keyValue === "Backspace" && charCount > 0) {
+            if (keyValue === "Backspace" && charCount > 0 /*&&
+                wordlist[charCount][0] != "-"*/) {  //Uncomment the comment when removedCharsList is removed
                 setWordlist(oldValue => {
                         let newValue = [...oldValue]
                         newValue[charCount-removedChars.length-1] = [newValue[charCount-removedChars.length-1][0], undefined]                        
