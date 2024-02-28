@@ -6,14 +6,14 @@ import CalcWPM from './utils/calcWPM'
 import FetchWordsFromTxtFile from './utils/fetchWordsFromTxtFile'
 import CorrectAndWrongNrOfChars from './utils/correctAndWrongNrOfChars'
 
-type wordTupleType = [string, boolean | undefined]
+/* wordTupleType is on the form -> [char, isItTyped, shouldTheCharBeHidden]*/
+type wordTupleType = [string, boolean | undefined, boolean]
 
 function App() {
     const localStorageKey = "highScore"
-    const initialTimeInSec = 2
+    const initialTimeInSec = 5
     const localStorageHighScore:string|null = localStorage.getItem(localStorageKey)
     const [wordlist, setWordlist] = useState<wordTupleType[]>([]) 
-    const [removedChars, setRemovedChars] = useState<wordTupleType[]>([])
     const [highScore, setHighScore] = useState<number>(localStorageHighScore===null?0:parseFloat(localStorageHighScore))
     const [nrOfCorrectChars, setNrOfCorrectChars] = useState<number>(0)
     const [nrOfWrongChars, setNrOfWrongChars] = useState<number>(0)
@@ -26,7 +26,7 @@ function App() {
         }
         if (timerIsZero && !isCharsCounted) {
             console.log("it does actually go in here")
-            const [nrOfCorrect, nrOfWrong, isCounted] = CorrectAndWrongNrOfChars(removedChars, wordlist)
+            const [nrOfCorrect, nrOfWrong, isCounted] = CorrectAndWrongNrOfChars(wordlist)
             setNrOfCorrectChars(nrOfCorrect)
             setNrOfWrongChars(nrOfWrong)
             setIsCharsCounted(isCounted)
@@ -53,8 +53,6 @@ function App() {
         setHighScore(0)
     }
 
-
-
     return (
         <div id = "content">
             <div id = "highScore">
@@ -66,7 +64,6 @@ function App() {
                 <Text setWordlist = {setWordlist} wordlist = {wordlist} 
                     nrOfCorrectChars = {nrOfCorrectChars} nrOfWrongChars = {nrOfWrongChars}
                     initialTimeInSec = {initialTimeInSec} setTimerIsZero = {setTimerIsZero}
-                    removedChars = {removedChars} setRemovedChars = {setRemovedChars}
                     setIsCharsCounted = {setIsCharsCounted}/>
             </div>
         </div>

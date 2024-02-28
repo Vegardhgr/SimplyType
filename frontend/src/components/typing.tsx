@@ -4,15 +4,14 @@ import renderStatus from '../utils/DisplayStatus';
 import HandleKeyboardEvent from '../utils/handleKeyboardEvent';
 
 type Dispatcher<S> = Dispatch<SetStateAction<S>>;
-type wordTupleType = [string, boolean | undefined]
+type wordTupleType = [string, boolean | undefined, boolean]
 
 function Typing({wordlist, setWordlist, nrOfCorrectChars,
     nrOfWrongChars, initialTimeInSec, setTimerIsZero,
-    removedChars, setRemovedChars, setIsCharsCounted} : {
+    setIsCharsCounted} : {
         wordlist: wordTupleType[], setWordlist: Dispatcher<wordTupleType[]>,
         nrOfCorrectChars: number, nrOfWrongChars: number, initialTimeInSec: number
-        setTimerIsZero: Dispatcher<boolean>, removedChars: wordTupleType[],
-        setRemovedChars: Dispatcher<wordTupleType[]>,
+        setTimerIsZero: Dispatcher<boolean>,
         setIsCharsCounted: Dispatcher<boolean>
     }){
     const [charCount, setCharCount] = useState(0)
@@ -50,10 +49,13 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
 
     
     const renderText = () => {
-        return wordlist.map(([char, bool], index) => {
-            if (bool === undefined) {
+        return wordlist.map(([char, isItTyped, shouldTheCharBeHidden], index) => {
+            if (shouldTheCharBeHidden) {
+                // Do nothing
+                return null
+            } else if (isItTyped === undefined) {
                 return <span key = {index}>{char}</span>
-            } else if (bool) {
+            } else if (isItTyped) {
                 return <span key = {index} style={{color: 'green'}}>{char}</span>
             } else {
                 return <span key = {index} style={{color: 'red'}}>{char}</span>               
@@ -63,12 +65,11 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
 
     const reset = () => {
         setTimer(initialTimeInSec)
-        setRemovedChars([])
         setCharCount(0)
         setTimerIsZero(false)
         setFirstCharTyped(false)
         setIsCharsCounted(false)
-        setWordlist([["Loading...", undefined]]) // Forces an update in the wordlist
+        setWordlist([["Loading...", undefined, false]]) // Forces an update in the wordlist
     }
 
     const keyPressed = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -80,13 +81,13 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
             setTimeLastUpdate(Date.now())
         }
 
-        HandleKeyboardEvent(charCount, setCharCount, removedChars, setRemovedChars, wordlist, setWordlist, e)
+        HandleKeyboardEvent(charCount, setCharCount, wordlist, setWordlist, e)
     }
     return(
         <div>
             {timer <= 0 ?
-                    renderStatus(nrOfCorrectChars, nrOfWrongChars, initialTimeInSec) :
-                    <p></p>
+                renderStatus(nrOfCorrectChars, nrOfWrongChars, initialTimeInSec) :
+                <p></p>
             }
             <div tabIndex={1} id = "text" onKeyDown={keyPressed}>{renderText()}</div>
             <div>Time:  {timer} sec</div>

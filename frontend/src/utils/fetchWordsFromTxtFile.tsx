@@ -3,7 +3,7 @@ import RandSortArr from './randSortArr';
 
 
 type Dispatcher<S> = Dispatch<SetStateAction<S>>;
-type wordTupleType = [string, boolean | undefined]
+type wordTupleType = [string, boolean | undefined, boolean]
 
 async function FetchWordsFromTxtFile(wordlist_txt:string, setWordlist:Dispatcher<wordTupleType[]>) {
     try {
@@ -13,7 +13,7 @@ async function FetchWordsFromTxtFile(wordlist_txt:string, setWordlist:Dispatcher
         wordsArray = RandSortArr(wordsArray) //Randomly sorting the array
         const wordsString = wordsArray.join('-') //Converts array into string with whitespace between each word
         const wordsTuple: wordTupleType[] = wordsString.split("").map((char) => {
-            return [char, undefined]
+            return [char, undefined,false]
         })
         setWordlist(wordsTuple)
     } catch(error) {
