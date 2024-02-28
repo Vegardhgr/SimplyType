@@ -11,7 +11,9 @@ Features:
 - [x] Add button to decide whether new high score should be saved.
 - [x] Add button to clear high score.
 - [ ] Backspace should only work for the current word.
-- [ ] Allowing users to designate specific characters for focused practice. 
+- [ ] Allowing users to designate specific characters for focused practice.
+- [ ] Add a simulation that shows previous typing speed. Visualizes how fast you currently type compared to previous round.
+- [ ] Add bots to compete with.
 - [ ] Add CSS.
 - [ ] Set up docker. (Just for fun).
 
