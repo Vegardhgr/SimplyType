@@ -10,7 +10,7 @@ Features:
 - [x] Save high score locally in the browser.
 - [x] Add button to decide whether new high score should be saved.
 - [x] Add button to clear high score.
-- [ ] Backspace should only work for the current word.
+- [x] Backspace should only work for the current word.
 - [ ] Allowing users to designate specific characters for focused practice.
 - [ ] Add a simulation that shows previous typing speed. Visualizes how fast you currently type compared to previous round.
 - [ ] Add bots to compete with.
@@ -18,5 +18,5 @@ Features:
 - [ ] Set up docker. (Just for fun).
 
 Internal improvements:
-- [ ] Not have a removed list that contains removed chars. Rather add a boolean to the tuple that states whether the char should be displayed.
+- [x] Not have a list that contains removed chars. Rather add a boolean to the tuple that states whether the char should be displayed.
 - [ ] Rename box.tsx to typing.tsx. Move all logic that is not responsible for rendering the text nor handeling input, out of this component.
