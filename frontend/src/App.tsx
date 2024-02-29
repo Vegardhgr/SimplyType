@@ -1,6 +1,6 @@
 import './App.css'
 import wordlist_txt from './wordlist.txt'
-import Text from './components/typing'
+import Typing from './components/typing'
 import { useState, useEffect } from 'react'
 import CalcWPM from './utils/calcWPM'
 import FetchWordsFromTxtFile from './utils/fetchWordsFromTxtFile'
@@ -11,7 +11,7 @@ type wordTupleType = [string, boolean | undefined, boolean]
 
 function App() {
     const localStorageKey = "highScore"
-    const initialTimeInSec = 5
+    const initialTimeInSec = 15
     const localStorageHighScore:string|null = localStorage.getItem(localStorageKey)
     const [wordlist, setWordlist] = useState<wordTupleType[]>([]) 
     const [highScore, setHighScore] = useState<number>(localStorageHighScore===null?0:parseFloat(localStorageHighScore))
@@ -25,7 +25,6 @@ function App() {
             FetchWordsFromTxtFile(wordlist_txt, setWordlist)
         }
         if (timerIsZero && !isCharsCounted) {
-            console.log("it does actually go in here")
             const [nrOfCorrect, nrOfWrong, isCounted] = CorrectAndWrongNrOfChars(wordlist)
             setNrOfCorrectChars(nrOfCorrect)
             setNrOfWrongChars(nrOfWrong)
@@ -61,7 +60,7 @@ function App() {
                 <button onClick={clearHighScore}>Clear high score</button>
             </div>
             <div id = "textAndTimeRendering">
-                <Text setWordlist = {setWordlist} wordlist = {wordlist} 
+                <Typing setWordlist = {setWordlist} wordlist = {wordlist} 
                     nrOfCorrectChars = {nrOfCorrectChars} nrOfWrongChars = {nrOfWrongChars}
                     initialTimeInSec = {initialTimeInSec} setTimerIsZero = {setTimerIsZero}
                     setIsCharsCounted = {setIsCharsCounted}/>
