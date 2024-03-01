@@ -47,6 +47,9 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
         }
     }, [timer, firstCharTyped /*timerId*/])
 
+    useEffect(() => {
+        setTimer(initialTimeInSec)
+    }, [initialTimeInSec]) 
     
     const renderText = () => {
         return wordlist.map(([char, isItTyped, shouldTheCharBeHidden], index) => {

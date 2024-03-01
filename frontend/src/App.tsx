@@ -5,13 +5,14 @@ import { useState, useEffect } from 'react'
 import CalcWPM from './utils/calcWPM'
 import FetchWordsFromTxtFile from './utils/fetchWordsFromTxtFile'
 import CorrectAndWrongNrOfChars from './utils/correctAndWrongNrOfChars'
+import TimerDropDownList from './components/timerDropDownList'
 
 /* wordTupleType is on the form -> [char, isItTyped, shouldTheCharBeHidden]*/
 type wordTupleType = [string, boolean | undefined, boolean]
 
 function App() {
     const localStorageKey = "highScore"
-    const initialTimeInSec = 15
+    const [initialTimeInSec, setInitialTimeInSec] = useState(15)
     const localStorageHighScore:string|null = localStorage.getItem(localStorageKey)
     const [wordlist, setWordlist] = useState<wordTupleType[]>([]) 
     const [highScore, setHighScore] = useState<number>(localStorageHighScore===null?0:parseFloat(localStorageHighScore))
@@ -51,7 +52,6 @@ function App() {
         localStorage.setItem(localStorageKey, "0")
         setHighScore(0)
     }
-
     return (
         <div id = "content">
             <div id = "highScore">
@@ -65,6 +65,7 @@ function App() {
                     initialTimeInSec = {initialTimeInSec} setTimerIsZero = {setTimerIsZero}
                     setIsCharsCounted = {setIsCharsCounted}/>
             </div>
+            <TimerDropDownList setInitialTimeInSec={setInitialTimeInSec}/>
         </div>
     )
 }
