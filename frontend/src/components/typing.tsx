@@ -1,5 +1,5 @@
 import './typing.css'
-import { useState, Dispatch, SetStateAction, useEffect} from 'react'
+import { useState, Dispatch, SetStateAction, useEffect, useReducer, useRef} from 'react'
 import renderStatus from '../utils/DisplayStatus';
 import HandleKeyboardEvent from '../utils/handleKeyboardEvent';
 
@@ -18,6 +18,13 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
     const [firstCharTyped, setFirstCharTyped] = useState(false)
     const [timer, setTimer] = useState<number>(initialTimeInSec)
     const [timeLastUpdate, setTimeLastUpdate] = useState(0)
+
+    const textRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        if (textRef.current) {
+            textRef.current.focus();
+        }
+    }, [firstCharTyped]);
     
     useEffect(() => {
         /*if (timerId !== null && !isTimerSet) {
@@ -50,7 +57,7 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
     useEffect(() => {
         setTimer(initialTimeInSec)
     }, [initialTimeInSec]) 
-    
+
     const renderText = () => {
         return wordlist.map(([char, isItTyped, shouldTheCharBeHidden], index) => {
             if (shouldTheCharBeHidden) {
@@ -73,6 +80,9 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
         setFirstCharTyped(false)
         setIsCharsCounted(false)
         setWordlist([["Loading...", undefined, false]]) // Forces an update in the wordlist
+        if (textRef.current) {
+            textRef.current.focus();
+        }
     }
 
     const keyPressed = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -92,7 +102,7 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
                 renderStatus(nrOfCorrectChars, nrOfWrongChars, initialTimeInSec) :
                 <p></p>
             }
-            <div tabIndex={1} id = "text" onKeyDown={keyPressed}>{renderText()}</div>
+            <div ref={textRef} style={{ outline: 'none' }} tabIndex={1} id = "text" onKeyDown={keyPressed} autoFocus>{renderText()}</div>
             <div>Time:  {timer} sec</div>
             <button onClick={reset}>Reset</button>
         </div>
