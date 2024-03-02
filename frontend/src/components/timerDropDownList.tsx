@@ -7,7 +7,7 @@ function TimerDropDownList({setInitialTimeInSec}:
     const renderOptions = () => {
         let timerOptions = []
         for (let i = 5; i <= 60; i+=5) {
-            let option = <option value = {i}>{i}</option>
+            let option = <option value = {i} key = {i}>{i}</option>
             timerOptions.push(option)
         }
         return timerOptions
