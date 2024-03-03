@@ -8,11 +8,12 @@ type wordTupleType = [string, boolean | undefined, boolean]
 
 function Typing({wordlist, setWordlist, nrOfCorrectChars,
     nrOfWrongChars, initialTimeInSec, setTimerIsZero,
-    setIsCharsCounted} : {
+    setIsCharsCounted, setTimerHasStart}: {
         wordlist: wordTupleType[], setWordlist: Dispatcher<wordTupleType[]>,
         nrOfCorrectChars: number, nrOfWrongChars: number, initialTimeInSec: number
         setTimerIsZero: Dispatcher<boolean>,
-        setIsCharsCounted: Dispatcher<boolean>
+        setIsCharsCounted: Dispatcher<boolean>,
+        setTimerHasStart: Dispatcher<boolean>
     }){
     const [charCount, setCharCount] = useState(0)
     const [firstCharTyped, setFirstCharTyped] = useState(false)
@@ -79,6 +80,7 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
         setTimerIsZero(false)
         setFirstCharTyped(false)
         setIsCharsCounted(false)
+        setTimerHasStart(false)
         setWordlist([["Loading...", undefined, false]]) // Forces an update in the wordlist
         if (textRef.current) {
             textRef.current.focus();
@@ -92,6 +94,7 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
         if (!firstCharTyped) { /*First time a character is typed*/
             setFirstCharTyped(true)
             setTimeLastUpdate(Date.now())
+            setTimerHasStart(true)
         }
 
         HandleKeyboardEvent(charCount, setCharCount, wordlist, setWordlist, e)

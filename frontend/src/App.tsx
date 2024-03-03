@@ -1,5 +1,4 @@
 import './App.css'
-import wordlist_txt from './wordlist.txt'
 import Typing from './components/typing'
 import { useState, useEffect } from 'react'
 import CalcWPM from './utils/calcWPM'
@@ -18,12 +17,14 @@ function App() {
     const [highScore, setHighScore] = useState<number>(localStorageHighScore===null?0:parseFloat(localStorageHighScore))
     const [nrOfCorrectChars, setNrOfCorrectChars] = useState<number>(0)
     const [nrOfWrongChars, setNrOfWrongChars] = useState<number>(0)
+    const [timerHasStart, setTimerHasStart] = useState(false)
     const [timerIsZero, setTimerIsZero] = useState(false)
     const [isCharsCounted, setIsCharsCounted] = useState(false)
+    const [language, setLanguage] = useState("eng")
 
     useEffect(() => {
         if ((wordlist.length === 0) || wordlist[0][0] ==="Loading...") {
-            FetchWordsFromTxtFile(wordlist_txt, setWordlist)
+            FetchWordsFromTxtFile(setWordlist, language)
         }
         if (timerIsZero && !isCharsCounted) {
             const [nrOfCorrect, nrOfWrong, isCounted] = CorrectAndWrongNrOfChars(wordlist)
@@ -63,9 +64,9 @@ function App() {
                 <Typing setWordlist = {setWordlist} wordlist = {wordlist} 
                     nrOfCorrectChars = {nrOfCorrectChars} nrOfWrongChars = {nrOfWrongChars}
                     initialTimeInSec = {initialTimeInSec} setTimerIsZero = {setTimerIsZero}
-                    setIsCharsCounted = {setIsCharsCounted}/>
+                    setIsCharsCounted = {setIsCharsCounted} setTimerHasStart = {setTimerHasStart}/>
             </div>
-            <TimerDropDownList setInitialTimeInSec={setInitialTimeInSec}/>
+            {!timerHasStart && <TimerDropDownList setInitialTimeInSec={setInitialTimeInSec}/>}
         </div>
     )
 }
