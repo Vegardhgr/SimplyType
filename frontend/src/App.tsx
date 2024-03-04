@@ -5,6 +5,7 @@ import CalcWPM from './utils/calcWPM'
 import FetchWordsFromTxtFile from './utils/fetchWordsFromTxtFile'
 import CorrectAndWrongNrOfChars from './utils/correctAndWrongNrOfChars'
 import TimerDropDownList from './components/timerDropDownList'
+import LangDropDownList from './components/langDropDownList'
 
 /* wordTupleType is on the form -> [char, isItTyped, shouldTheCharBeHidden]*/
 type wordTupleType = [string, boolean | undefined, boolean]
@@ -33,6 +34,10 @@ function App() {
             setIsCharsCounted(isCounted)
         }
     }, [wordlist, timerIsZero]);
+
+    useEffect(() => {
+        FetchWordsFromTxtFile(setWordlist, language)
+    }, [language])
 
     const isHighScore = () => {
         const potentialHighScore:number = CalcWPM(nrOfCorrectChars, initialTimeInSec)
@@ -67,6 +72,7 @@ function App() {
                     setIsCharsCounted = {setIsCharsCounted} setTimerHasStart = {setTimerHasStart}/>
             </div>
             {!timerHasStart && <TimerDropDownList setInitialTimeInSec={setInitialTimeInSec}/>}
+            {!timerHasStart && <LangDropDownList setLanguage = {setLanguage}/>}
         </div>
     )
 }
