@@ -6,6 +6,7 @@ function TimerDropDownList({setInitialTimeInSec}:
 
     const renderOptions = () => {
         let timerOptions = []
+        timerOptions.push(<option value = "" hidden>--Time--</option>)
         for (let i = 5; i <= 60; i+=5) {
             let option = <option value = {i} key = {i}>{i}</option>
             timerOptions.push(option)
@@ -19,7 +20,8 @@ function TimerDropDownList({setInitialTimeInSec}:
 
     return(
         <div>
-            <select onChange = {handleChange}>
+            <label htmlFor = "selectTime" >Select time</label><br/>
+            <select id = "selectTime" onChange = {handleChange}>
                 {renderOptions()}
             </select>
         </div>

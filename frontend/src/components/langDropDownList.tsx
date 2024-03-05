@@ -9,9 +9,11 @@ function LangDropDownList({setLanguage}:
 
     return(
         <div>
-            <select onChange = {handleChange}>
-                <option value = {"eng"}>English</option>
-                <option value = {"nor"}>Norwegian</option>
+            <label htmlFor="languageSelect">Select language</label><br/>
+            <select id = "languageSelect" onChange = {handleChange}>
+                <option value = "" hidden>--Language--</option>
+                <option value = "eng">English</option>
+                <option value = "nor">Norwegian</option>
             </select>
         </div>
     )
