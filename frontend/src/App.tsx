@@ -73,7 +73,9 @@ function App() {
             </div>
             {!timerHasStart && <TimerDropDownList setInitialTimeInSec={setInitialTimeInSec}/>}
             {!timerHasStart && <LangDropDownList setLanguage = {setLanguage}/>}
+            <div>Prev score: {localStorage.getItem("score")}</div>
         </div>
+
     )
 }
 

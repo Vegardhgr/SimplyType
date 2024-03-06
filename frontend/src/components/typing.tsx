@@ -1,5 +1,5 @@
 import './typing.css'
-import { useState, Dispatch, SetStateAction, useEffect, useReducer, useRef} from 'react'
+import { useState, Dispatch, SetStateAction, useEffect, useRef} from 'react'
 import renderStatus from '../utils/DisplayStatus';
 import HandleKeyboardEvent from '../utils/handleKeyboardEvent';
 

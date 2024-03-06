@@ -32,7 +32,8 @@ function HandleKeyboardEvent(charCount:number, setCharCount:Dispatcher<number>,
             setWordlist(newCopy)
 
             decCharCount()
-        } else if (keyValue !== "Backspace" && (keyCode === 32 || keyCode >= 65 && keyCode <= 125)) { //keyCode === 32 is space            
+        } else if (keyValue !== "Backspace" && (keyCode === 32 || keyCode >= 65 && keyCode <= 125) ||  //keyCode === 32 is space
+                       keyCode === 230 || keyCode === 248 || keyCode === 229) { // lowercase æ, ø, å             
             let isCorrectKey = false
 
             if (keyValue === wordlist[charCount][0] || 
