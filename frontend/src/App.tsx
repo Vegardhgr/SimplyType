@@ -22,6 +22,7 @@ function App() {
     const [timerIsZero, setTimerIsZero] = useState(false)
     const [isCharsCounted, setIsCharsCounted] = useState(false)
     const [language, setLanguage] = useState("eng")
+    const [uniqueWords, setUniqueWords] = useState("")
 
     useEffect(() => {
         if ((wordlist.length === 0) || wordlist[0][0] ==="Loading...") {
