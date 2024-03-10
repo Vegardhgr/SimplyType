@@ -2,18 +2,20 @@ import './typing.css'
 import { useState, Dispatch, SetStateAction, useEffect, useRef} from 'react'
 import renderStatus from '../utils/DisplayStatus';
 import HandleKeyboardEvent from '../utils/handleKeyboardEvent';
+import CreateWordlist from '../utils/createWordlist';
 
 type Dispatcher<S> = Dispatch<SetStateAction<S>>;
 type wordTupleType = [string, boolean | undefined, boolean]
 
 function Typing({wordlist, setWordlist, nrOfCorrectChars,
     nrOfWrongChars, initialTimeInSec, setTimerIsZero,
-    setIsCharsCounted, setTimerHasStart}: {
+    setIsCharsCounted, setTimerHasStart, uniqueWords}: {
         wordlist: wordTupleType[], setWordlist: Dispatcher<wordTupleType[]>,
         nrOfCorrectChars: number, nrOfWrongChars: number, initialTimeInSec: number
         setTimerIsZero: Dispatcher<boolean>,
         setIsCharsCounted: Dispatcher<boolean>,
-        setTimerHasStart: Dispatcher<boolean>
+        setTimerHasStart: Dispatcher<boolean>,
+        uniqueWords: String[]
     }){
     const [charCount, setCharCount] = useState(0)
     const [firstCharTyped, setFirstCharTyped] = useState(false)
@@ -75,6 +77,7 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
     }
 
     const reset = () => {
+        CreateWordlist(uniqueWords, setWordlist)
         setTimer(initialTimeInSec)
         setCharCount(0)
         setTimerIsZero(false)

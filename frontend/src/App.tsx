@@ -6,6 +6,7 @@ import FetchWordsFromTxtFile from './utils/fetchWordsFromTxtFile'
 import CorrectAndWrongNrOfChars from './utils/correctAndWrongNrOfChars'
 import TimerDropDownList from './components/timerDropDownList'
 import LangDropDownList from './components/langDropDownList'
+import CreateWordlist from './utils/createWordlist'
 
 /* wordTupleType is on the form -> [char, isItTyped, shouldTheCharBeHidden]*/
 type wordTupleType = [string, boolean | undefined, boolean]
@@ -22,11 +23,11 @@ function App() {
     const [timerIsZero, setTimerIsZero] = useState(false)
     const [isCharsCounted, setIsCharsCounted] = useState(false)
     const [language, setLanguage] = useState("eng")
-    const [uniqueWords, setUniqueWords] = useState("")
+    const [uniqueWords, setUniqueWords] = useState<String[]>([])
 
     useEffect(() => {
         if ((wordlist.length === 0) || wordlist[0][0] ==="Loading...") {
-            FetchWordsFromTxtFile(setWordlist, language)
+            FetchWordsFromTxtFile(setUniqueWords, language)
         }
         if (timerIsZero && !isCharsCounted) {
             const [nrOfCorrect, nrOfWrong, isCounted] = CorrectAndWrongNrOfChars(wordlist)
@@ -37,8 +38,12 @@ function App() {
     }, [wordlist, timerIsZero]);
 
     useEffect(() => {
-        FetchWordsFromTxtFile(setWordlist, language)
+        FetchWordsFromTxtFile(setUniqueWords, language)
     }, [language])
+
+    useEffect(() => {
+        CreateWordlist(uniqueWords, setWordlist)
+    }, [uniqueWords])
 
     const isHighScore = () => {
         const potentialHighScore:number = CalcWPM(nrOfCorrectChars, initialTimeInSec)
@@ -70,7 +75,8 @@ function App() {
                 <Typing setWordlist = {setWordlist} wordlist = {wordlist} 
                     nrOfCorrectChars = {nrOfCorrectChars} nrOfWrongChars = {nrOfWrongChars}
                     initialTimeInSec = {initialTimeInSec} setTimerIsZero = {setTimerIsZero}
-                    setIsCharsCounted = {setIsCharsCounted} setTimerHasStart = {setTimerHasStart}/>
+                    setIsCharsCounted = {setIsCharsCounted} setTimerHasStart = {setTimerHasStart}
+                    uniqueWords={uniqueWords}/>
             </div>
             {!timerHasStart && <TimerDropDownList setInitialTimeInSec={setInitialTimeInSec}/>}
             {!timerHasStart && <LangDropDownList setLanguage = {setLanguage}/>}
