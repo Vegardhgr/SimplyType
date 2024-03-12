@@ -1,7 +1,7 @@
-import { JSXElementConstructor, SetStateAction } from "react";
+import { SetStateAction } from "react";
 
-function charDropDownList({language, setChar}:
-    {language:string, setChar:React.Dispatch<SetStateAction<string>>}){
+function CharDropDownList({language, setChar}:
+    {language:string, setChar:React.Dispatch<SetStateAction<String>>}){
     
     const langLetterMap = new Map<string, string[]>([
         ["eng", ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']],
@@ -14,9 +14,10 @@ function charDropDownList({language, setChar}:
     const createOptions = () => {
         let optionArr:JSX.Element[] = []
         const letters = langLetterMap.get(language)
+        optionArr.push(<option hidden>--Char--</option>)
         if (letters) {
             letters.forEach(char => {
-                optionArr.push(<option key = {char} value = {char}>char</option>)
+                optionArr.push(<option key = {char} value = {char}>{char}</option>)
             })
         }
         return optionArr
@@ -32,4 +33,4 @@ function charDropDownList({language, setChar}:
     )
 }
 
-export default LangDropDownList;
+export default CharDropDownList;

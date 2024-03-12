@@ -7,6 +7,7 @@ import CorrectAndWrongNrOfChars from './utils/correctAndWrongNrOfChars'
 import TimerDropDownList from './components/timerDropDownList'
 import LangDropDownList from './components/langDropDownList'
 import CreateWordlist from './utils/createWordlist'
+import CharDropDownList from './components/charDropDownList'
 
 /* wordTupleType is on the form -> [char, isItTyped, shouldTheCharBeHidden]*/
 type wordTupleType = [string, boolean | undefined, boolean]
@@ -24,6 +25,7 @@ function App() {
     const [isCharsCounted, setIsCharsCounted] = useState(false)
     const [language, setLanguage] = useState("eng")
     const [uniqueWords, setUniqueWords] = useState<String[]>([])
+    const [char, setChar] = useState<String>("");
 
     useEffect(() => {
         if ((wordlist.length === 0) || wordlist[0][0] ==="Loading...") {
@@ -80,6 +82,7 @@ function App() {
             </div>
             {!timerHasStart && <TimerDropDownList setInitialTimeInSec={setInitialTimeInSec}/>}
             {!timerHasStart && <LangDropDownList setLanguage = {setLanguage}/>}
+            {!timerHasStart && <CharDropDownList language={language} setChar={setChar}/>}
             <div>Prev score: {localStorage.getItem("score")}</div>
         </div>
 
