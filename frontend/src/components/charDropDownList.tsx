@@ -14,7 +14,7 @@ function CharDropDownList({language, setChar}:
     const createOptions = () => {
         let optionArr:JSX.Element[] = []
         const letters = langLetterMap.get(language)
-        optionArr.push(<option hidden>--Char--</option>)
+        optionArr.push(<option key = {-1} hidden>--Char--</option>)
         if (letters) {
             letters.forEach(char => {
                 optionArr.push(<option key = {char} value = {char}>{char}</option>)
