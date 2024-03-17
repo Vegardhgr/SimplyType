@@ -21,6 +21,6 @@ Features:
 
 Internal improvements:
 - [x] Not have a list that contains removed chars. Rather add a boolean to the tuple that states whether the char should be displayed.
-- [x] Rename box.tsx to typing.tsx. Move all logic that is not responsible for rendering the text nor handeling input, out of this component.
+- [x] Rename box.tsx to typing.tsx. Move all logic that is not responsible for rendering the text nor handling input out of this component.
 - [x] Place the words in a useState-variable to reduce fetch-calls on every rerender.
-- [ ] Do not retrieve all the words at once. Rather retrieve x amount of words at the beginning, and when y amount of words have been typed, retrieve x number of new words.
+- [x] Do not retrieve all the words at once. Rather retrieve x amount of words at the beginning, and when y amount of words have been typed, retrieve x number of new words.
