@@ -6,7 +6,7 @@ import FetchWordsFromTxtFile from './utils/fetchWordsFromTxtFile'
 import CorrectAndWrongNrOfChars from './utils/correctAndWrongNrOfChars'
 import TimerDropDownList from './components/timerDropDownList'
 import LangDropDownList from './components/langDropDownList'
-import CreateWordlist from './utils/createWordlist'
+import CreateWordlist from './utils/createNewWordlist'
 import CharDropDownList from './components/charDropDownList'
 
 /* wordTupleType is on the form -> [char, isItTyped, shouldTheCharBeHidden]*/

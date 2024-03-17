@@ -2,7 +2,8 @@ import './typing.css'
 import { useState, Dispatch, SetStateAction, useEffect, useRef} from 'react'
 import renderStatus from '../utils/DisplayStatus';
 import HandleKeyboardEvent from '../utils/handleKeyboardEvent';
-import CreateWordlist from '../utils/createWordlist';
+import ConcatNewWordlist from '../utils/concatWordlist';
+import CreateNewWordlist from '../utils/createNewWordlist';
 
 type Dispatcher<S> = Dispatch<SetStateAction<S>>;
 type wordTupleType = [string, boolean | undefined, boolean]
@@ -21,6 +22,8 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
     const [firstCharTyped, setFirstCharTyped] = useState(false)
     const [timer, setTimer] = useState<number>(initialTimeInSec)
     const [timeLastUpdate, setTimeLastUpdate] = useState(0)
+    const [wordCount, setWordCount] = useState(0)
+    const [fetchWords, setFetchWords] = useState(false)
 
     const textRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
@@ -76,10 +79,15 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
         })
     }
 
+    useEffect(() => {
+        console.log("wordcount" + wordCount)
+    }, [wordCount])
+
     const reset = () => {
-        CreateWordlist(uniqueWords, setWordlist)
+        CreateNewWordlist(uniqueWords, setWordlist)
         setTimer(initialTimeInSec)
         setCharCount(0)
+        setWordCount(0)
         setTimerIsZero(false)
         setFirstCharTyped(false)
         setIsCharsCounted(false)
@@ -91,6 +99,7 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
     }
 
     const keyPressed = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        
         if (timer <= 0) {
             return
         }
@@ -100,8 +109,17 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
             setTimerHasStart(true)
         }
 
-        HandleKeyboardEvent(charCount, setCharCount, wordlist, setWordlist, e)
+        HandleKeyboardEvent(charCount, setCharCount, wordlist, setWordlist, setWordCount, e)
+        if (wordlist[charCount][0] === "-" && wordCount % 10 == 0) {
+            console.log("Updated at", wordCount)
+            ConcatNewWordlist(uniqueWords, setWordlist)
+            // setFetchWords(false)
+        }
+        // } else if (!fetchWords && wordCount % 10 !== 0) {
+        //     setFetchWords(true)
+        // }
     }
+
     return(
         <div>
             {timer <= 0 ?

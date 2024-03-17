@@ -5,7 +5,7 @@ type wordTupleType = [string, boolean | undefined, boolean]
 
 function HandleKeyboardEvent(charCount:number, setCharCount:Dispatcher<number>, 
     wordlist:wordTupleType[], setWordlist:Dispatcher<wordTupleType[]>,
-    e: React.KeyboardEvent<HTMLDivElement>) {
+    setWordCount:Dispatcher<number>, e: React.KeyboardEvent<HTMLDivElement>) {
 
     const keystrokesBeforeDeletion:number = 20 
     const keyCode = e.key.charCodeAt(0)
@@ -21,7 +21,7 @@ function HandleKeyboardEvent(charCount:number, setCharCount:Dispatcher<number>,
         
     if (keyValue.length === 1 || keyValue === "Backspace") {
         if (keyValue === "Backspace" && charCount > 0 &&
-            wordlist[charCount-1][0] != "-") {  //Uncomment the comment when removedCharsList is removed
+            wordlist[charCount-1][0] != "-") {  
 
             const newCopy = [...wordlist]
             newCopy[charCount-1][1] = undefined
@@ -39,6 +39,9 @@ function HandleKeyboardEvent(charCount:number, setCharCount:Dispatcher<number>,
             if (keyValue === wordlist[charCount][0] || 
                 keyCode === 32 && wordlist[charCount][0] === "-") {
                 isCorrectKey = true
+            } 
+            if (wordlist[charCount][0] === "-") {
+                setWordCount(prevValue => prevValue + 1)
             }
 
             const newCopy = [...wordlist]
