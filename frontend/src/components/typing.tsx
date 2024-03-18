@@ -10,20 +10,20 @@ type wordTupleType = [string, boolean | undefined, boolean]
 
 function Typing({wordlist, setWordlist, nrOfCorrectChars,
     nrOfWrongChars, initialTimeInSec, setTimerIsZero,
-    setIsCharsCounted, setTimerHasStart, uniqueWords}: {
+    setIsCharsCounted, setTimerHasStart, uniqueWords, char}: {
         wordlist: wordTupleType[], setWordlist: Dispatcher<wordTupleType[]>,
         nrOfCorrectChars: number, nrOfWrongChars: number, initialTimeInSec: number
         setTimerIsZero: Dispatcher<boolean>,
         setIsCharsCounted: Dispatcher<boolean>,
         setTimerHasStart: Dispatcher<boolean>,
-        uniqueWords: String[]
+        uniqueWords: string[], char:string
     }){
     const [charCount, setCharCount] = useState(0)
     const [firstCharTyped, setFirstCharTyped] = useState(false)
     const [timer, setTimer] = useState<number>(initialTimeInSec)
     const [timeLastUpdate, setTimeLastUpdate] = useState(0)
     const [wordCount, setWordCount] = useState(0)
-    const [fetchWords, setFetchWords] = useState(false)
+    // const [fetchWords, setFetchWords] = useState(false)
 
     const textRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
@@ -84,7 +84,7 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
     }, [wordCount])
 
     const reset = () => {
-        CreateNewWordlist(uniqueWords, setWordlist)
+        CreateNewWordlist(uniqueWords, setWordlist, char)
         setTimer(initialTimeInSec)
         setCharCount(0)
         setWordCount(0)
@@ -112,7 +112,7 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
         HandleKeyboardEvent(charCount, setCharCount, wordlist, setWordlist, setWordCount, e)
         if (wordlist[charCount][0] === "-" && wordCount % 10 == 0) {
             console.log("Updated at", wordCount)
-            ConcatNewWordlist(uniqueWords, setWordlist)
+            ConcatNewWordlist(uniqueWords, setWordlist, char)
             // setFetchWords(false)
         }
         // } else if (!fetchWords && wordCount % 10 !== 0) {

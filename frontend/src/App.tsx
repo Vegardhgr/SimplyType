@@ -24,8 +24,8 @@ function App() {
     const [timerIsZero, setTimerIsZero] = useState(false)
     const [isCharsCounted, setIsCharsCounted] = useState(false)
     const [language, setLanguage] = useState("eng")
-    const [uniqueWords, setUniqueWords] = useState<String[]>([])
-    const [char, setChar] = useState<String>("");
+    const [uniqueWords, setUniqueWords] = useState<string[]>([])
+    const [char, setChar] = useState<string>("");
 
     useEffect(() => {
         if ((wordlist.length === 0) || wordlist[0][0] ==="Loading...") {
@@ -44,7 +44,7 @@ function App() {
     }, [language])
 
     useEffect(() => {
-        CreateWordlist(uniqueWords, setWordlist)
+        CreateWordlist(uniqueWords, setWordlist, char)
     }, [uniqueWords])
 
     const isHighScore = () => {
@@ -78,7 +78,7 @@ function App() {
                     nrOfCorrectChars = {nrOfCorrectChars} nrOfWrongChars = {nrOfWrongChars}
                     initialTimeInSec = {initialTimeInSec} setTimerIsZero = {setTimerIsZero}
                     setIsCharsCounted = {setIsCharsCounted} setTimerHasStart = {setTimerHasStart}
-                    uniqueWords={uniqueWords}/>
+                    uniqueWords={uniqueWords} char = {char}/>
             </div>
             {!timerHasStart && <TimerDropDownList setInitialTimeInSec={setInitialTimeInSec}/>}
             {!timerHasStart && <LangDropDownList setLanguage = {setLanguage}/>}

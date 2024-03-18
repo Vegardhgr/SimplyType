@@ -1,7 +1,7 @@
 import { SetStateAction } from "react";
 
 function CharDropDownList({language, setChar}:
-    {language:string, setChar:React.Dispatch<SetStateAction<String>>}){
+    {language:string, setChar:React.Dispatch<SetStateAction<string>>}){
     
     const langLetterMap = new Map<string, string[]>([
         ["eng", ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']],
