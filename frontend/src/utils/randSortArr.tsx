@@ -7,16 +7,20 @@ function RandSortArr(arr: string[], numberOfWords: number, char: string) {
 
     const randomWordsFromArr: string[] = []
 
-    for (let i = 0; i<numberOfWords; i++) {
-        let notContainingChar = true
-        let word = ""
-        while(notContainingChar) {
-            word = arr[Math.floor(Math.random() * arr.length)]
-            if (word.includes(char)) {
-                notContainingChar=false
+    if (char !== "") {
+        let newArr = []
+        for (let i = 0; i<arr.length; i++) {
+            if (arr[i].includes(char)) {
+                newArr.push(arr[i])
             }
-            console.log(notContainingChar)
         }
+        if (newArr.length === 0) {
+            return ["Please select another char"]
+        }
+        arr = newArr
+    }
+    for (let i = 0; i<numberOfWords; i++) {
+        let word = arr[Math.floor(Math.random() * arr.length)]
         randomWordsFromArr.push(word)
     }
     return randomWordsFromArr
