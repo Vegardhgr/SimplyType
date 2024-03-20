@@ -45,7 +45,7 @@ function App() {
 
     useEffect(() => {
         CreateWordlist(uniqueWords, setWordlist, char)
-    }, [uniqueWords])
+    }, [uniqueWords, char])
 
     const isHighScore = () => {
         const potentialHighScore:number = CalcWPM(nrOfCorrectChars, initialTimeInSec)
