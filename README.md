@@ -13,7 +13,7 @@ Features:
 - [x] Backspace should only work for the current word.
 - [x] Drop-down list to support other languages.
 - [x] Drop-down list to select time.
-- [ ] Allowing users to designate specific characters for focused practice.
+- [x] Allowing users to designate specific characters for focused practice.
 - [ ] Add a simulation that shows previous typing speed. Visualizes how fast you currently type compared to previous round.
 - [ ] Add bots to compete with.
 - [ ] Add CSS.
