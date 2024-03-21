@@ -23,7 +23,6 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
     const [timer, setTimer] = useState<number>(initialTimeInSec)
     const [timeLastUpdate, setTimeLastUpdate] = useState(0)
     const [wordCount, setWordCount] = useState(0)
-    // const [fetchWords, setFetchWords] = useState(false)
 
     const textRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
@@ -33,15 +32,8 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
     }, [firstCharTyped]);
     
     useEffect(() => {
-        /*if (timerId !== null && !isTimerSet) {
-            setIsTimerSet(true);
-            Timer({timeLastUpdate, setTimeLastUpdate, timer, setTimer})
-
-        }*/
-        
         if (firstCharTyped) {
             // Start the timer when the component mounts
-        
             const timerId = setInterval(() => {
                 const timeNow = Date.now()
                 const elapsedTime = timeNow - timeLastUpdate
@@ -58,7 +50,7 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
             // Cleanup function to clear the timer when the component unmounts
             return () => clearInterval(timerId);
         }
-    }, [timer, firstCharTyped /*timerId*/])
+    }, [timer, firstCharTyped])
 
     useEffect(() => {
         setTimer(initialTimeInSec)
@@ -99,7 +91,6 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
     }
 
     const keyPressed = (e: React.KeyboardEvent<HTMLDivElement>) => {
-        
         if (timer <= 0) {
             return
         }
@@ -110,14 +101,10 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
         }
 
         HandleKeyboardEvent(charCount, setCharCount, wordlist, setWordlist, setWordCount, e)
+
         if (wordlist[charCount][0] === "-" && wordCount % 10 == 0) {
-            console.log("Updated at", wordCount)
             ConcatNewWordlist(uniqueWords, setWordlist, char)
-            // setFetchWords(false)
         }
-        // } else if (!fetchWords && wordCount % 10 !== 0) {
-        //     setFetchWords(true)
-        // }
     }
 
     return(
