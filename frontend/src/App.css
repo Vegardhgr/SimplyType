@@ -13,6 +13,16 @@
 #highScoreButtons{
   
 }
+
+#content{
+  background-color: yellow;
+  position:relative;
+}
+.circleContainer {
+  position: absolute;
+  top: 100px; /* Adjust as needed to place the circle where you want */
+  left: 0%;  /* Center horizontally */
+}
 /*#root {
   max-width: 1280px;
   margin: 0 auto;

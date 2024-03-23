@@ -8,14 +8,16 @@ import TimerDropDownList from './components/timerDropDownList'
 import LangDropDownList from './components/langDropDownList'
 import CreateWordlist from './utils/createNewWordlist'
 import CharDropDownList from './components/charDropDownList'
+import Circle from './components/circle'
 
 /* wordTupleType is on the form -> [char, isItTyped, shouldTheCharBeHidden]*/
 type wordTupleType = [string, boolean | undefined, boolean]
 
 function App() {
-    const localStorageKey = "highScore"
+    const localStorageHighScoreKey = "highScore"
+    const localStoragePrevScoreKey = "score"
     const [initialTimeInSec, setInitialTimeInSec] = useState(15)
-    const localStorageHighScore:string|null = localStorage.getItem(localStorageKey)
+    const localStorageHighScore:string|null = localStorage.getItem(localStorageHighScoreKey)
     const [wordlist, setWordlist] = useState<wordTupleType[]>([]) 
     const [highScore, setHighScore] = useState<number>(localStorageHighScore===null?0:parseFloat(localStorageHighScore))
     const [nrOfCorrectChars, setNrOfCorrectChars] = useState<number>(0)
@@ -26,6 +28,7 @@ function App() {
     const [language, setLanguage] = useState("eng")
     const [uniqueWords, setUniqueWords] = useState<string[]>([])
     const [char, setChar] = useState<string>("");
+    const [position, setPosition] = useState({x:0, y:200})
 
     useEffect(() => {
         if ((wordlist.length === 0) || wordlist[0][0] ==="Loading...") {
@@ -56,16 +59,24 @@ function App() {
     }
     const saveHighScore = () => {
         const newHighScore = CalcWPM(nrOfCorrectChars, initialTimeInSec)
-        localStorage.setItem(localStorageKey, newHighScore.toString())
+        localStorage.setItem(localStorageHighScoreKey, newHighScore.toString())
         setHighScore(newHighScore)
     }
     const saveHighScoreButton = () => {
         return isHighScore() ? <button onClick={saveHighScore}>Save high score</button>:""
     }
     const clearHighScore = () => {
-        localStorage.setItem(localStorageKey, "0")
+        localStorage.setItem(localStorageHighScoreKey, "0")
         setHighScore(0)
     }
+    const calcSpeed = () => {
+        if (Number(localStoragePrevScoreKey) !== 0) {
+            const speed = Number(localStoragePrevScoreKey) * initialTimeInSec/60
+            // Number(localStoragePrevScoreKey)/initialTimeInSec
+        }
+    }
+
+
     return (
         <div id = "content">
             <div id = "highScore">
@@ -83,7 +94,10 @@ function App() {
             {!timerHasStart && <TimerDropDownList setInitialTimeInSec={setInitialTimeInSec}/>}
             {!timerHasStart && <LangDropDownList setLanguage = {setLanguage}/>}
             {!timerHasStart && <CharDropDownList language={language} setChar={setChar}/>}
-            <div>Prev score: {localStorage.getItem("score")}</div>
+            <div className='circleContainer'>
+                <Circle position={position}/>
+            </div>
+            <div>Prev score: {localStorage.getItem(localStoragePrevScoreKey)}</div>
         </div>
 
     )
