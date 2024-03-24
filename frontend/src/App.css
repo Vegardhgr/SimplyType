@@ -14,15 +14,22 @@
   
 }
 
-#content{
-  background-color: yellow;
-  position:relative;
-}
-.circleContainer {
+.circleContainer{
   position: absolute;
-  top: 100px; /* Adjust as needed to place the circle where you want */
-  left: 0%;  /* Center horizontally */
+  top:50px;
 }
+
+.circleContainer::before{
+    content: '';
+    position: absolute;
+    top: 210px;
+    left: 0px; /*Extend the line 25px to the left*/
+    right: -100px; /* Extend the line 25px to the right */
+    height: 2px; /* Thickness of the line */
+    background-color: red; /* Color of the line */
+    z-index: -1; /* Ensure the line is behind the circle */
+}
+
 /*#root {
   max-width: 1280px;
   margin: 0 auto;

@@ -9,6 +9,7 @@ import LangDropDownList from './components/langDropDownList'
 import CreateWordlist from './utils/createNewWordlist'
 import CharDropDownList from './components/charDropDownList'
 import Circle from './components/circle'
+import { CirclePosition } from './interfaces/interfaces'
 
 /* wordTupleType is on the form -> [char, isItTyped, shouldTheCharBeHidden]*/
 type wordTupleType = [string, boolean | undefined, boolean]
@@ -28,7 +29,7 @@ function App() {
     const [language, setLanguage] = useState("eng")
     const [uniqueWords, setUniqueWords] = useState<string[]>([])
     const [char, setChar] = useState<string>("");
-    const [position, setPosition] = useState({x:0, y:200})
+    const [position, setPosition] = useState<CirclePosition>({x:0, y:200})
 
     useEffect(() => {
         if ((wordlist.length === 0) || wordlist[0][0] ==="Loading...") {
@@ -69,13 +70,13 @@ function App() {
         localStorage.setItem(localStorageHighScoreKey, "0")
         setHighScore(0)
     }
-    const calcSpeed = () => {
-        if (Number(localStoragePrevScoreKey) !== 0) {
-            const speed = Number(localStoragePrevScoreKey) * initialTimeInSec/60
-            // Number(localStoragePrevScoreKey)/initialTimeInSec
-        }
-    }
-
+    // const calcAnimationSpeed = () => {
+    //     const prevWPM = Number(localStorage.getItem(localStoragePrevScoreKey))
+    //     if (prevWPM !== 0) {
+    //         const speed = prevWPM * initialTimeInSec/60
+    //         // Number(localStoragePrevScoreKey)/initialTimeInSec
+    //     }
+    // }
 
     return (
         <div id = "content">
@@ -89,13 +90,13 @@ function App() {
                     nrOfCorrectChars = {nrOfCorrectChars} nrOfWrongChars = {nrOfWrongChars}
                     initialTimeInSec = {initialTimeInSec} setTimerIsZero = {setTimerIsZero}
                     setIsCharsCounted = {setIsCharsCounted} setTimerHasStart = {setTimerHasStart}
-                    uniqueWords={uniqueWords} char = {char}/>
+                    uniqueWords={uniqueWords} char = {char} setPosition={setPosition}/>
             </div>
             {!timerHasStart && <TimerDropDownList setInitialTimeInSec={setInitialTimeInSec}/>}
             {!timerHasStart && <LangDropDownList setLanguage = {setLanguage}/>}
             {!timerHasStart && <CharDropDownList language={language} setChar={setChar}/>}
             <div className='circleContainer'>
-                <Circle position={position}/>
+                {/*Number(localStorage.getItem(localStoragePrevScoreKey)) !== 0 && */<Circle position={position}/>}
             </div>
             <div>Prev score: {localStorage.getItem(localStoragePrevScoreKey)}</div>
         </div>

@@ -1,9 +1,7 @@
+import { CirclePosition } from "../interfaces/interfaces"
 import "./circle.css"
-interface Speed {
-    position: {x:number,y:number}
-}
 
-function Circle({position}:Speed) {
+function Circle({position}:{position:CirclePosition}) {
     return(
         <div 
             className="circle"

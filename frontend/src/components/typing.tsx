@@ -4,19 +4,21 @@ import renderStatus from '../utils/DisplayStatus';
 import HandleKeyboardEvent from '../utils/handleKeyboardEvent';
 import ConcatNewWordlist from '../utils/concatWordlist';
 import CreateNewWordlist from '../utils/createNewWordlist';
+import CalcWPM from '../utils/calcWPM';
+import { CirclePosition } from '../interfaces/interfaces';
 
 type Dispatcher<S> = Dispatch<SetStateAction<S>>;
 type wordTupleType = [string, boolean | undefined, boolean]
 
 function Typing({wordlist, setWordlist, nrOfCorrectChars,
     nrOfWrongChars, initialTimeInSec, setTimerIsZero,
-    setIsCharsCounted, setTimerHasStart, uniqueWords, char}: {
+    setIsCharsCounted, setTimerHasStart, uniqueWords, char, setPosition}: {
         wordlist: wordTupleType[], setWordlist: Dispatcher<wordTupleType[]>,
         nrOfCorrectChars: number, nrOfWrongChars: number, initialTimeInSec: number
         setTimerIsZero: Dispatcher<boolean>,
         setIsCharsCounted: Dispatcher<boolean>,
         setTimerHasStart: Dispatcher<boolean>,
-        uniqueWords: string[], char:string
+        uniqueWords: string[], char:string, setPosition: Dispatcher<CirclePosition>
     }){
     const [charCount, setCharCount] = useState(0)
     const [firstCharTyped, setFirstCharTyped] = useState(false)
@@ -39,6 +41,10 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
                 const elapsedTime = timeNow - timeLastUpdate
                 setTimeLastUpdate(timeNow)
                 setTimer(prevTime => (prevTime - Math.floor(elapsedTime/1000))); //Converts elapsedTime from ms to s
+                const wpm = CalcWPM(nrOfCorrectChars, initialTimeInSec)
+                setPosition({x:(wpm/Number(localStorage.getItem("score"))*100),y:200})
+                console.log("WPM: ", wpm)
+                console.log("Nr of correct: ", nrOfCorrectChars)
             }, 100);
 
             // Stop the timer when the time reaches zero
@@ -88,6 +94,7 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
         if (textRef.current) {
             textRef.current.focus();
         }
+        setPosition({x:0, y:200})
     }
 
     const keyPressed = (e: React.KeyboardEvent<HTMLDivElement>) => {
