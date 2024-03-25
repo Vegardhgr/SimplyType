@@ -15,16 +15,17 @@
 }
 
 .circleContainer{
-  position: absolute;
-  top:50px;
+  position: relative;
+  top:  20px;
+  left: 50%;
+  transform: translateX(-200px);
 }
 
 .circleContainer::before{
     content: '';
     position: absolute;
-    top: 210px;
-    left: 0px; /*Extend the line 25px to the left*/
-    right: -100px; /* Extend the line 25px to the right */
+    top: 10px;
+    width: 300px;
     height: 2px; /* Thickness of the line */
     background-color: red; /* Color of the line */
     z-index: -1; /* Ensure the line is behind the circle */

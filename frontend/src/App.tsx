@@ -29,19 +29,13 @@ function App() {
     const [language, setLanguage] = useState("eng")
     const [uniqueWords, setUniqueWords] = useState<string[]>([])
     const [char, setChar] = useState<string>("");
-    const [position, setPosition] = useState<CirclePosition>({x:0, y:200})
+    const [position, setPosition] = useState<CirclePosition>({x:0, y:0})
 
     useEffect(() => {
         if ((wordlist.length === 0) || wordlist[0][0] ==="Loading...") {
             FetchWordsFromTxtFile(setUniqueWords, language)
         }
-        if (timerIsZero && !isCharsCounted) {
-            const [nrOfCorrect, nrOfWrong, isCounted] = CorrectAndWrongNrOfChars(wordlist)
-            setNrOfCorrectChars(nrOfCorrect)
-            setNrOfWrongChars(nrOfWrong)
-            setIsCharsCounted(isCounted)
-        }
-    }, [wordlist, timerIsZero]);
+    }, [wordlist]);
 
     useEffect(() => {
         FetchWordsFromTxtFile(setUniqueWords, language)
@@ -90,14 +84,15 @@ function App() {
                     nrOfCorrectChars = {nrOfCorrectChars} nrOfWrongChars = {nrOfWrongChars}
                     initialTimeInSec = {initialTimeInSec} setTimerIsZero = {setTimerIsZero}
                     setIsCharsCounted = {setIsCharsCounted} setTimerHasStart = {setTimerHasStart}
-                    uniqueWords={uniqueWords} char = {char} setPosition={setPosition}/>
+                    uniqueWords={uniqueWords} char = {char} setPosition={setPosition}
+                    setNrOfCorrectChars={setNrOfCorrectChars} setNrOfWrongChars={setNrOfWrongChars}/>
+            </div>
+            <div className='circleContainer'>
+                <Circle position={position}/>
             </div>
             {!timerHasStart && <TimerDropDownList setInitialTimeInSec={setInitialTimeInSec}/>}
             {!timerHasStart && <LangDropDownList setLanguage = {setLanguage}/>}
             {!timerHasStart && <CharDropDownList language={language} setChar={setChar}/>}
-            <div className='circleContainer'>
-                {/*Number(localStorage.getItem(localStoragePrevScoreKey)) !== 0 && */<Circle position={position}/>}
-            </div>
             <div>Prev score: {localStorage.getItem(localStoragePrevScoreKey)}</div>
         </div>
 
