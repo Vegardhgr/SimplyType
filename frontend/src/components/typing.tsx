@@ -62,7 +62,7 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
             let wpm = CalcWPM(nrOfCorrectChars, initialTimeInSec)
             const highScore = Number(localStorage.getItem("highScore"))
             if (highScore === 0) {
-                setPosition({x:lengthOfLine,y:200})
+                setPosition({x:lengthOfLine,y:0})
             } else {
                 if (wpm > highScore) {
                     wpm = highScore
