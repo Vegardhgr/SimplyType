@@ -9,7 +9,7 @@ import CharDropDownList from './components/charDropDownList'
 import Circle from './components/circle'
 import { CirclePosition } from './interfaces/interfaces'
 
-/* wordTupleType is on the form -> [char, isItTyped, shouldTheCharBeHidden]*/
+/* wordTupleType is on the form -> [(char), (correct, wrong, or not typed yet), (whether the char should be hidden)]*/
 type wordTupleType = [string, boolean | undefined, boolean]
 
 function App() {
@@ -54,9 +54,6 @@ function App() {
                 <div>
                     <button onClick={clearHighScore}>Clear high score</button>
                 </div>
-                {/* <div>
-                    {timerIsZero  && saveHighScoreButton()}
-                </div> */}
             </div>
             <div id = "textAndTimeRendering">
                 <Typing setWordlist = {setWordlist} wordlist = {wordlist} 
