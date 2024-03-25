@@ -28,6 +28,8 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
     const [timeLastUpdate, setTimeLastUpdate] = useState(0)
     const [wordCount, setWordCount] = useState(0)
     const lengthOfLine = 300
+    const colorCorrect = "gray"
+    const colorWrong = "brown"
 
     const textRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
@@ -84,9 +86,9 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
             } else if (isItTyped === undefined) {
                 return <span key = {index}>{char}</span>
             } else if (isItTyped) {
-                return <span key = {index} style={{color: 'green'}}>{char}</span>
+                return <span key = {index} style={{color: colorCorrect}}>{char}</span>
             } else {
-                return <span key = {index} style={{color: 'red'}}>{char}</span>               
+                return <span key = {index} style={{color: colorWrong}}>{char}</span>               
             }
         })
     }
