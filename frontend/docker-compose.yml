@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  nodeapp:
+    build: .
+    environment:
+      - PORT=8080
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+      - /app/node_modules
