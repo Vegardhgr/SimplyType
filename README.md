@@ -14,7 +14,7 @@ Features:
 - [x] Drop-down list to support other languages.
 - [x] Drop-down list to select time.
 - [x] Allowing users to designate specific characters for focused practice.
-- [ ] Add a simulation that shows previous typing speed. Visualizes how fast you currently type compared to previous round.
+- [x] Add a simulation that shows previous typing speed. Visualizes how fast you currently type compared to high score.
 - [ ] Add bots to compete with.
 - [ ] Add CSS.
 - [ ] Set up docker. (Just for fun).
