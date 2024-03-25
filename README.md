@@ -17,7 +17,7 @@ Features:
 - [x] Add a simulation that shows previous typing speed. Visualizes how fast you currently type compared to high score.
 - [ ] Add bots to compete with.
 - [ ] Add CSS.
-- [ ] Set up docker. (Just for fun).
+- [x] Set up docker. (Just for fun).
 
 Internal improvements:
 - [x] Not have a list that contains removed chars. Rather add a boolean to the tuple that states whether the char should be displayed.
