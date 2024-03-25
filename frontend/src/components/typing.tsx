@@ -11,16 +11,15 @@ type Dispatcher<S> = Dispatch<SetStateAction<S>>;
 type wordTupleType = [string, boolean | undefined, boolean]
 
 function Typing({wordlist, setWordlist, nrOfCorrectChars,
-    nrOfWrongChars, initialTimeInSec, setTimerIsZero,
-    setIsCharsCounted, setTimerHasStart, uniqueWords, char, setPosition, 
-    setNrOfCorrectChars, setNrOfWrongChars}: {
+    nrOfWrongChars, initialTimeInSec,
+    setTimerHasStart, uniqueWords, char, setPosition, 
+    setNrOfCorrectChars, setNrOfWrongChars, setHighScore}: {
         wordlist: wordTupleType[], setWordlist: Dispatcher<wordTupleType[]>,
         nrOfCorrectChars: number, nrOfWrongChars: number, initialTimeInSec: number
-        setTimerIsZero: Dispatcher<boolean>,
-        setIsCharsCounted: Dispatcher<boolean>,
         setTimerHasStart: Dispatcher<boolean>,
         uniqueWords: string[], char:string, setPosition: Dispatcher<CirclePosition>,
         setNrOfCorrectChars: Dispatcher<number>, setNrOfWrongChars: Dispatcher<number>,
+        setHighScore: Dispatcher<number>
     }){
     const [charCount, setCharCount] = useState(0)
     const [firstCharTyped, setFirstCharTyped] = useState(false)
@@ -50,8 +49,12 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
 
             // Stop the timer when the time reaches zero
             if (timer <= 0) {
-                setTimerIsZero(true)
                 clearInterval(timerId);
+                const wpm  = CalcWPM(nrOfCorrectChars, initialTimeInSec)
+                if (wpm > Number(localStorage.getItem("highScore"))) {
+                    localStorage.setItem("highScore", wpm.toString())
+                    setHighScore(wpm)
+                }
             }
 
             // Cleanup function to clear the timer when the component unmounts
@@ -101,9 +104,7 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
         setTimer(initialTimeInSec)
         setCharCount(0)
         setWordCount(0)
-        setTimerIsZero(false)
         setFirstCharTyped(false)
-        setIsCharsCounted(false)
         setTimerHasStart(false)
         setWordlist([["Loading...", undefined, false]]) // Forces an update in the wordlist
         if (textRef.current) {
