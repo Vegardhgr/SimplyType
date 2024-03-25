@@ -61,7 +61,7 @@ function App() {
                     initialTimeInSec = {initialTimeInSec} setTimerHasStart = {setTimerHasStart}
                     uniqueWords={uniqueWords} char = {char} setPosition={setPosition}
                     setNrOfCorrectChars={setNrOfCorrectChars} setNrOfWrongChars={setNrOfWrongChars}
-                    setHighScore={setHighScore}/>
+                    setHighScore={setHighScore} language={language}/>
             </div>
             <div className='circleContainer'>
                 <Circle position={position}/>

@@ -13,13 +13,13 @@ type wordTupleType = [string, boolean | undefined, boolean]
 function Typing({wordlist, setWordlist, nrOfCorrectChars,
     nrOfWrongChars, initialTimeInSec,
     setTimerHasStart, uniqueWords, char, setPosition, 
-    setNrOfCorrectChars, setNrOfWrongChars, setHighScore}: {
+    setNrOfCorrectChars, setNrOfWrongChars, setHighScore, language}: {
         wordlist: wordTupleType[], setWordlist: Dispatcher<wordTupleType[]>,
         nrOfCorrectChars: number, nrOfWrongChars: number, initialTimeInSec: number
         setTimerHasStart: Dispatcher<boolean>,
         uniqueWords: string[], char:string, setPosition: Dispatcher<CirclePosition>,
         setNrOfCorrectChars: Dispatcher<number>, setNrOfWrongChars: Dispatcher<number>,
-        setHighScore: Dispatcher<number>
+        setHighScore: Dispatcher<number>, language: string
     }){
     const [charCount, setCharCount] = useState(0)
     const [firstCharTyped, setFirstCharTyped] = useState(false)
@@ -35,7 +35,7 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
         if (textRef.current) {
             textRef.current.focus();
         }
-    }, [firstCharTyped]);
+    }, [firstCharTyped, char, initialTimeInSec, language]);
     
     useEffect(() => {
         if (firstCharTyped) {
@@ -119,7 +119,15 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
         if (timer <= 0) {
             return
         }
-        if (!firstCharTyped) { /*First time a character is typed*/
+        const keyCode = e.key.charCodeAt(0)
+        const keyValue = e.key.valueOf()
+
+        /*It will not start before a valid key is pressed*/
+        // if (!firstCharTyped && keyValue.length === 1 && ((keyCode === 32 || keyCode >= 65 && keyCode <= 125) ||  //keyCode === 32 is space
+        //                keyCode === 230 || keyCode === 248 || keyCode === 229)) {
+        if (!firstCharTyped && keyValue.length === 1) {
+            console.log("Code: " + keyCode)
+            console.log("Val: " + keyValue + " :: " + keyValue.length)
             setFirstCharTyped(true)
             setTimeLastUpdate(Date.now())
             setTimerHasStart(true)
