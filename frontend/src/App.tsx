@@ -3,7 +3,7 @@ import Typing from './components/typing'
 import { useState, useEffect } from 'react'
 import CalcWPM from './utils/calcWPM'
 import FetchWordsFromTxtFile from './utils/fetchWordsFromTxtFile'
-import CorrectAndWrongNrOfChars from './utils/correctAndWrongNrOfChars'
+// import CorrectAndWrongNrOfChars from './utils/correctAndWrongNrOfChars'
 import TimerDropDownList from './components/timerDropDownList'
 import LangDropDownList from './components/langDropDownList'
 import CreateWordlist from './utils/createNewWordlist'
@@ -25,7 +25,7 @@ function App() {
     const [nrOfWrongChars, setNrOfWrongChars] = useState<number>(0)
     const [timerHasStart, setTimerHasStart] = useState(false)
     const [timerIsZero, setTimerIsZero] = useState(false)
-    const [isCharsCounted, setIsCharsCounted] = useState(false)
+    const [_, setIsCharsCounted] = useState(false)
     const [language, setLanguage] = useState("eng")
     const [uniqueWords, setUniqueWords] = useState<string[]>([])
     const [char, setChar] = useState<string>("");
