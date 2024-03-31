@@ -1,3 +1,6 @@
+# SimplyType
+## Run instruction
+ - Command: docker compose up
 Features:
 - [x] Retrieve words from a text file.
 - [x] Validate if the typed char matches char in word retrieved from text file.
