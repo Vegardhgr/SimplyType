@@ -1,7 +1,7 @@
 # SimplyType
 ## Run instruction
  - Command: docker compose up
-Features:
+## Features:
 - [x] Retrieve words from a text file.
 - [x] Validate if the typed char matches char in word retrieved from text file.
 - [x] Add a countdown timer.
@@ -22,7 +22,7 @@ Features:
 - [ ] Add CSS.
 - [x] Set up docker. (Just for fun).
 
-Internal improvements:
+## Internal improvements:
 - [x] Not have a list that contains removed chars. Rather add a boolean to the tuple that states whether the char should be displayed.
 - [x] Rename box.tsx to typing.tsx. Move all logic that is not responsible for rendering the text nor handling input out of this component.
 - [x] Place the words in a useState-variable to reduce fetch-calls on every rerender.
