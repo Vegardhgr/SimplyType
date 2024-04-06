@@ -142,14 +142,27 @@ function Typing({wordlist, setWordlist, nrOfCorrectChars,
     }
 
     return(
-        <div>
-            {timer <= 0 ?
-                renderStatus(nrOfCorrectChars, nrOfWrongChars, initialTimeInSec) :
-                <p></p>
-            }
-            <div ref={textRef} style={{ outline: 'none' }} tabIndex={1} id = "text" onKeyDown={keyPressed} autoFocus>{renderText()}</div>
-            <div>Time:  {timer} sec</div>
-            <button onClick={reset}>Reset</button>
+        <div className = "textAndTimeRendering">
+            <div>
+                {timer <= 0 ?
+                    renderStatus(nrOfCorrectChars, nrOfWrongChars, initialTimeInSec):<p></p>
+                }
+            </div>
+            <div ref={textRef}
+                style={{ outline: 'none' }} 
+                tabIndex={1} 
+                className = "text" 
+                onKeyDown={keyPressed} 
+                autoFocus
+            >
+                {renderText()}
+            </div>
+            <div className = "time">
+                Time:  {timer} sec
+                <div>
+                    <button onClick={reset}>Reset</button>
+                </div>
+            </div>
         </div>
     )
 

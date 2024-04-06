@@ -1,15 +1,20 @@
-#textAndTimeRendering{
-    text-align: center;
-    overflow: hidden;
-    width: 40%;
-    margin:auto;
-    /*border: 2px solid;*/
+.scores {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
 }
 
-#highScore {
-  margin-top: -18px;
-	float: right;
+.highScore {
+    margin-left: 20px;
 }
+
+/* .textAndTimeRendering {
+    display: flex;
+    flex-direction: row;
+    justify-content: center; 
+    width: 40%;
+} */
+
 
 #highScoreButtons{
   
@@ -18,8 +23,7 @@
 .circleContainer{
   position: relative;
   top:  20px;
-  left: 50%;
-  transform: translateX(-200px);
+  transform: translateX(-150px);
 }
 
 .circleContainer::before{

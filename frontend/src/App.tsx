@@ -48,23 +48,29 @@ function App() {
 
     return (
         <div id = "content">
-            <div style = {{marginLeft:"1300px"}}>Prev score: {localStorage.getItem(localStoragePrevScoreKey)}</div>
-            <div id = "highScore">
-                <div>High score: {highScore}</div>
+            <div className = "scores">
                 <div>
-                    <button onClick={clearHighScore}>Clear high score</button>
+                    Prev score: {localStorage.getItem(localStoragePrevScoreKey)}
+                </div>
+                <div className = "highScore">
+                    <div>
+                        High score: {highScore}
+                    </div>
+                    <div>
+                        <button onClick={clearHighScore}>Clear high score</button>
+                    </div>
                 </div>
             </div>
-            <div id = "textAndTimeRendering">
+            <div className = "textAndTimeRendering">
                 <Typing setWordlist = {setWordlist} wordlist = {wordlist} 
                     nrOfCorrectChars = {nrOfCorrectChars} nrOfWrongChars = {nrOfWrongChars}
                     initialTimeInSec = {initialTimeInSec} setTimerHasStart = {setTimerHasStart}
                     uniqueWords={uniqueWords} char = {char} setPosition={setPosition}
                     setNrOfCorrectChars={setNrOfCorrectChars} setNrOfWrongChars={setNrOfWrongChars}
                     setHighScore={setHighScore} language={language}/>
-            </div>
-            <div className='circleContainer'>
-                <Circle position={position}/>
+                <div className='circleContainer'>
+                    <Circle position={position}/>
+                </div>
             </div>
             {!timerHasStart && <TimerDropDownList setInitialTimeInSec={setInitialTimeInSec}/>}
             {!timerHasStart && <LangDropDownList setLanguage = {setLanguage}/>}

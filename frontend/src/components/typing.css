@@ -1,4 +1,18 @@
-#text {
+.textAndTimeRendering {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.text {
     white-space: nowrap;
     font-size:x-large;
+    overflow: hidden;
+    width: 900px;
+}
+
+.time {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
